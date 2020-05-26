@@ -77,6 +77,52 @@ export default [
     ]
   },
   {
+    path: 'contentmanage',
+    name: 'contantmanae',
+    component: Main,
+    meta: {
+      title: '内容管理',
+      icon: 'ios-book-outline'
+    },
+    children: [{
+      path: 'contentlist',
+      name: 'contantList',
+      meta:{
+        icon:'md-book',
+        title: '内容列表'
+      },
+      component: () => import('@/view/join-page.vue')
+    },
+      {
+        path:'contentreview',
+        name:'contentReview',
+        meta:{
+          icon:'md-book',
+          title: '内容审核'
+        },
+        component:parentView,
+        children: [
+          {
+            path:'tag',
+            name:'tag',
+            meta: {
+              icon: 'md-book',
+              title:'敏感信息标记'
+            }
+          }
+        ]
+      },
+      {
+        path:'releaseplan',
+        name:'releasePlan',
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:''
+      }
+    ]
+  },
+  {
     path: '/',
     name: '_home',
     redirect: '/home',
