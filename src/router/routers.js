@@ -54,13 +54,13 @@ export default [
           icon: 'ios-hand',
           title: '权限管理'
         },
-        component: () => import('@/view/join-page.vue')
+        component: () => import('@/view/permission/permission.vue')
       },
       {
         path: 'role',
         name: 'role',
         meta: {
-          icon: 'md-man',
+          icon: 'ios-people',
           title: '角色管理'
         },
         component: () => import('@/view/join-page.vue')
@@ -69,7 +69,7 @@ export default [
         path: 'page',
         name: 'page',
         meta: {
-          icon: 'md-book',
+          icon: 'ios-albums',
           title: '菜单及元素管理'
         },
         component: () => import('@/view/join-page.vue')
@@ -78,17 +78,17 @@ export default [
   },
   {
     path: 'contentmanage',
-    name: 'contantmanae',
+    name: 'contantmanage',
     component: Main,
     meta: {
       title: '内容管理',
-      icon: 'ios-book-outline'
+      icon: 'ios-book'
     },
     children: [{
       path: 'contentlist',
       name: 'contantList',
       meta:{
-        icon:'md-book',
+        icon:'ios-bookmark',
         title: '内容列表'
       },
       component: () => import('@/view/join-page.vue')
@@ -97,7 +97,7 @@ export default [
         path:'contentreview',
         name:'contentReview',
         meta:{
-          icon:'md-book',
+          icon:'ios-bookmarks',
           title: '内容审核'
         },
         component:parentView,
@@ -106,19 +106,200 @@ export default [
             path:'tag',
             name:'tag',
             meta: {
-              icon: 'md-book',
+              icon: 'ios-bug',
               title:'敏感信息标记'
-            }
-          }
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
+          {
+            path:'review',
+            name:'ios-brush',
+            meta: {
+              icon: 'md-book',
+              title:'人工复核、审查'
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
         ]
       },
       {
         path:'releaseplan',
         name:'releasePlan',
+        meta:{
+          icon:'logo-buffer',
+          title:'发布计划'
+        },
+        component:parentView,
+        children: [
+          {
+            path:'officialaccount',
+            name:'officialaccount',
+            meta: {
+              icon: 'ios-chatbubbles',
+              title:'公众号发布计划'
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
+          {
+            path:'weindex',
+            name:'weindex',
+            meta: {
+              icon: 'ios-chatbubbles',
+              title:'微官网发布计划'
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
+          {
+            path:'liveshow',
+            name:'liveshow',
+            meta: {
+              icon: 'ios-desktop',
+              title:'直播计划'
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
+        ]
+      },
+      {
+        path:'template',
+        name:'template',
+        meta:{
+          icon:'ios-document',
+          title:'模板管理'
+        },
         component:()=>import('@/view/join-page.vue')
       },
       {
-        path:''
+        path:'material',
+        name:'material',
+        meta: {
+          icon:'md-cloud',
+          title: '素材库'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'review',
+        name:'review',
+        meta:{
+          icon:'md-create',
+          title:'复盘'
+        },
+        component:()=>import('@/view/join-page.vue')
+      }
+    ]
+  },
+  {
+    path:'/data',
+    name:'data',
+    meta:{
+      icon:'ios-pie',
+      title:'数据管理'
+    },
+    component: Main,
+    children: [
+      {
+        path:'compinfo',
+        name:'compinfo',
+        meta:{
+          icon:'ios-filing',
+          title:'企业信息'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'teainfo',
+        name:'teainfo',
+        meta: {
+          icon:'ios-leaf',
+          title:'茶叶信息'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'attestinfo',
+        name:'attestinfo',
+        meta: {
+          icon:'ios-contact',
+          title:'认证信息'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'blacklist',
+        name:'blacklist',
+        meta: {
+          icon:'ios-document-outline',
+          title:'黑名单'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'whitelist',
+        name:'whitelist',
+        meta: {
+          icon:'ios-document',
+          title:'白名单'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path:'accusinfo',
+        name:'accusinfo',
+        meta: {
+          icon:'ios-document-outline',
+          title:'举报信息'
+        },
+        component:parentView,
+        children: [
+          {
+            path:'record',
+            name:'record',
+            meta: {
+              icon:'ios-create-outline',
+              title:'记录'
+            },
+            component:()=>import('@/view/join-page.vue')
+          },
+          {
+            path:'review',
+            name:'review',
+            meta: {
+              icon:'md-cube',
+              title:'审核'
+            },
+            component:()=>import('@/view/join-page.vue')
+          }
+        ]
+      },
+    ]
+  },
+  {
+    path:'/riskmanage',
+    name:'riskmanage',
+    meta: {
+      icon: 'ios-flame-outline',
+      title: '风控管理'
+    },
+    component:Main,
+    children: [
+      {
+        path:'epcredit',
+        name:'enterpricecredit',
+        meta: {
+          icon: 'ios-ribbon',
+          title:'企业信用评级'
+        },
+        component:()=>import('@/view/join-page.vue')
+      },
+      {
+        path: 'accessmechanism',
+        name:'accessmechanism',
+        meta: {
+          icon:'md-flower',
+          title:'准入机制'
+        },
+        component:()=>import('@/view/join-page.vue')
       }
     ]
   },

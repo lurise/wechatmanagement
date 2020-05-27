@@ -7,6 +7,13 @@ export const getTableData = () => {
   })
 }
 
+export const getUserData=()=>{
+  return axios.request({
+    url: 'get_user_data',
+    method:'get'
+  })
+}
+
 export const getDragList = () => {
   return axios.request({
     url: 'get_drag_list',
