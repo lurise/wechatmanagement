@@ -2,7 +2,8 @@ import Mock from 'mockjs'
 import {doCustomTimes} from '@/libs/util'
 import orgData from './data/org-data'
 import {treeData} from './data/tree-select'
-import {userinfoData} from './data/userinfo-data'
+import {userinfoData,Roles} from './data/userinfo-data'
+
 
 const Random = Mock.Random
 
@@ -20,6 +21,10 @@ export const getTableData = req => {
 
 export const getUserData = req => {
   return userinfoData
+}
+
+export const getRoles=req=>{
+  return Roles
 }
 
 export const getDragList = req => {

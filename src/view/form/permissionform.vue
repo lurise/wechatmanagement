@@ -1,0 +1,52 @@
+<template>
+  <Form :model="formItem" :label-width="80">
+    <FormItem label="姓名">
+      <Input v-model="formItem.name" placeholder="Enter something..."></Input>
+    </FormItem>
+    <FormItem label="微信名">
+      <Input v-model="formItem.wechatname" placeholder="Enter something..."></Input>
+    </FormItem>
+    <FormItem label="权限">
+      <Select v-model="formItem.permission" multiple>
+        <Option v-for="item in Roles" :key="item.value" :value="item.value">{{item.label}}</Option>
+        <!--        <Option value="SuperAdmin">超级管理员</Option>-->
+        <!--        <Option value="Admin">管理员</Option>-->
+        <!--        <Option value="Editor">编辑员</Option>-->
+      </Select>
+    </FormItem>
+    <FormItem>
+      <Button type="primary">Submit</Button>
+      <Button style="margin-left: 8px">Cancel</Button>
+    </FormItem>
+  </Form>
+</template>
+<script>
+  import {getRoles} from "../../api/data";
+
+  export default {
+    name: 'PermmisionForm',
+    data() {
+      return {
+        Roles: []
+      }
+    },
+    props: {
+      formItem: {
+        name: '',
+        wechatname: '',
+        permission: []
+      }
+    },
+    methods: {
+      getRoleData() {
+        getRoles().then((res) => this.Roles = res.data);
+      }
+    },
+    mounted() {
+      this.getRoleData();
+    }
+  }
+</script>
+<style scoped>
+
+</style>

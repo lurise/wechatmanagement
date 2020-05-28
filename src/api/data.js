@@ -14,6 +14,13 @@ export const getUserData=()=>{
   })
 }
 
+export const getRoles=()=>{
+  return axios.request({
+    url:'get_roles',
+    method:'get'
+  })
+}
+
 export const getDragList = () => {
   return axios.request({
     url: 'get_drag_list',
