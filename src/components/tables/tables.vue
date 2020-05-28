@@ -181,6 +181,7 @@
           ["Admin", "管理员"],
           ["Editor", "编辑员"]]),
         permissionForm: {
+          index: 1,
           name: '',
           wechatname: '',
           permission: []
@@ -198,8 +199,9 @@
       PermissionForm
     },
     methods: {
-      asyncOK(){
-
+      asyncOK() {
+        let index = this.permissionForm.index
+        this.insideTableData[index].permission = this.permissionForm.permission
       },
       getColor(rolename) {
         if (rolename === 'SuperAdmin') {
@@ -213,9 +215,10 @@
         }
       },
       show(index) {
-        console.log(this.insideTableData[index])
+        // console.log(this.insideTableData[index])
         this.permissionModal = true;
         this.permissionForm = {
+          index: index,
           name: this.insideTableData[index].name,
           wechatname: this.insideTableData[index].wechatname,
           permission: this.insideTableData[index].permission

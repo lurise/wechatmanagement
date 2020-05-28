@@ -14,10 +14,6 @@
         <!--        <Option value="Editor">编辑员</Option>-->
       </Select>
     </FormItem>
-    <FormItem>
-      <Button type="primary">Submit</Button>
-      <Button style="margin-left: 8px">Cancel</Button>
-    </FormItem>
   </Form>
 </template>
 <script>
