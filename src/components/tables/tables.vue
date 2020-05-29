@@ -52,12 +52,18 @@
         <!--        <Button type="error" size="small" @click="remove(index)">Delete</Button>-->
       </template>
       <template slot-scope="{ row, index }" slot="permission_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">权限编辑</Button>
         <!--        <Button type="error" size="small" @click="remove(index)">Delete</Button>-->
+      </template>
+      <template slot-scope="{row,index}" slot="role_edit">
+        <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
       </template>
     </Table>
     <Modal v-model="permissionModal" title="权限修改" :loading="loading" @on-ok="asyncOK">
       <permission-form :formItem="permissionForm"></permission-form>
+    </Modal>
+    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
+      <Tree :data="roleTreeData" show-checkbox></Tree>
     </Modal>
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
@@ -192,7 +198,32 @@
         edittingText: '',
         searchValue: '',
         searchKey: '',
-        permissionModal: false
+        permissionModal: false,
+        roleModal: false,
+        roleTreeData: [
+          {
+            title: '主页',
+            expand: true,
+            children: [
+              {
+                title: '绑定微信号',
+                expand: true
+              },
+              {
+                title: '角色管理',
+                expand: true
+              },
+              {
+                title: '权限管理',
+                expand: true
+              },
+              {
+                title: '菜单及元素管理',
+                expand: true
+              },
+            ]
+          }
+        ]
       }
     },
     components: {
@@ -212,6 +243,24 @@
           return 'warning'
         } else {
           return 'default'
+        }
+      },
+      roleTreeShow(index) {
+        this.roleModal = true;
+        this.roleTreeData =this.insideTableData[index].roleInfo;
+      },
+      equalAttr(attr1, attr2) {
+        if (attr1.id === attr2.id) {
+          return true
+        } else {
+          return false
+        }
+      },
+      findObjById(attr,id){
+        for(let i=0;i<attr.length;i++){
+          if(attr[i].id===id){
+            return attr[i]
+          }
         }
       },
       show(index) {

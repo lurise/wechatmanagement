@@ -7,17 +7,37 @@ export const getTableData = () => {
   })
 }
 
-export const getUserData=()=>{
+export const getUserData = () => {
   return axios.request({
     url: 'get_user_data',
-    method:'get'
+    method: 'get'
   })
 }
 
-export const getRoles=()=>{
+export const getRoles = () => {
   return axios.request({
-    url:'get_roles',
-    method:'get'
+    url: 'get_roles',
+    method: 'get'
+  })
+}
+
+export const getRoleInfo = (token) => {
+  return axios.request({
+    url: 'get_role_info',
+    params: {
+      token
+    },
+    method: 'get'
+  })
+}
+
+export const getAccessInfo = (token) => {
+  return axios.request({
+    url: 'get_access_info',
+    params: {
+      token
+    },
+    method: 'get'
   })
 }
 

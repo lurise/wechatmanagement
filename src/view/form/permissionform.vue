@@ -1,10 +1,10 @@
 <template>
   <Form :model="formItem" :label-width="80">
     <FormItem label="姓名">
-      <Input v-model="formItem.name" placeholder="Enter something..."></Input>
+      <Input v-model="formItem.name" disabled placeholder="Enter something..."></Input>
     </FormItem>
     <FormItem label="微信名">
-      <Input v-model="formItem.wechatname" placeholder="Enter something..."></Input>
+      <Input v-model="formItem.wechatname" disabled placeholder="Enter something..."></Input>
     </FormItem>
     <FormItem label="权限">
       <Select v-model="formItem.permission" multiple>
