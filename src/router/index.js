@@ -22,31 +22,27 @@ const turnTo = (to, access, next) => {
   //   alertObj(routes[0].meta)
   //   next()
   // } // 有权限，可访问
-    if (!store.state.user.hasGetAccessInfo) {
-      store.dispatch("getAccessInfo").then(res => {
-        // console.log("turn to:"+store.state.user.accessInfo)
-        // alertObj(store.state.user.accessInfo)
-        // alertObj(store.state.user.accessInfo[0])
-        // alertObj(routes)
-      }).catch(() => {
-        setToken('')
-        next({
-          name: 'login'
-        })
+  if (!store.state.user.hasGetAccessInfo) {
+    store.dispatch("getAccessInfo").then(res => {
+    }).catch(() => {
+      setToken('')
+      next({
+        name: 'login'
       })
-    }
+    })
+  }
   if (canTurnTo(to.name, access, store.state.user.accessInfo)) next() // 有权限，可访问
   else next({replace: true, name: 'error_401'}) // 无权限，重定向到401页面
 }
 
-const alertObj =(obj)=>{
-    var description = "";
-    for (var i in obj) {
-      var property = obj[i];
-      description += i + " = " + property + "\n";
-    }
-    alert(description);
+const alertObj = (obj) => {
+  var description = "";
+  for (var i in obj) {
+    var property = obj[i];
+    description += i + " = " + property + "\n";
   }
+  alert(description);
+}
 
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()

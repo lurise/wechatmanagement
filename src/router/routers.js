@@ -28,8 +28,8 @@ export default [
     component: () => import('@/view/login/login.vue')
   },
   {
-    path: '/manage',
-    name: 'manage',
+    path: '/accountmanage',
+    name: 'accountmanage',
     component: Main,
     meta: {
       hideInMenu: false,
@@ -78,7 +78,7 @@ export default [
   },
   {
     path: 'contentmanage',
-    name: 'contantmanage',
+    name: 'contentmanage',
     component: Main,
     meta: {
       title: '内容管理',
@@ -86,16 +86,16 @@ export default [
     },
     children: [{
       path: 'contentlist',
-      name: 'contantList',
+      name: 'contentlist',
       meta: {
         icon: 'ios-bookmark',
         title: '内容列表'
       },
-      component: () => import('@/view/join-page.vue')
+      component: () => import('@/view/content/contentlist')
     },
       {
         path: 'contentreview',
-        name: 'contentReview',
+        name: 'contentreview',
         meta: {
           icon: 'ios-bookmarks',
           title: '内容审核'
@@ -112,8 +112,8 @@ export default [
             component: () => import('@/view/join-page.vue')
           },
           {
-            path: 'review',
-            name: 'ios-brush',
+            path: 'olreview',
+            name: 'olreview',
             meta: {
               icon: 'md-book',
               title: '人工复核、审查'

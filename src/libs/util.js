@@ -163,8 +163,6 @@ const hasAccess = (access, route) => {
 }
 
 const hasStoreAccess = (access, route) => {
-  console.log("hasStoreAccess:" + access)
-  console.log("hatStoreAccess:" + route)
   if (route.roleAccess) return hasOneOf(access, route.roleAccess)
   else return true
 }
@@ -177,22 +175,19 @@ const hasStoreAccess = (access, route) => {
  * @description 用户是否可跳转到该页
  */
 export const canTurnTo = (name, access, routes) => {
-  const routePermissionJudge = (list) => {
-    return list.some(item => {
-      if (item.children && item.children.length) {
-        return routePermissionJudge(item.children)
-      } else if (item.name === name) {
-        return hasStoreAccess(access, item)
-      }
-      return true
-    })
-  }
-
-  // if (!store.state.user.hasGetAccessInfo) {
-  //   store.dispatch('getAccessInfo').then(routePermissionJudge(store.state.user.accessInfo))
+  // const routePermissionJudge = (list) => {
+  //   return list.some(item => {
+  //     if (item.children && item.children.length) {
+  //       return routePermissionJudge(item.children)
+  //     } else if (item.name === name) {
+  //       return hasStoreAccess(access, item)
+  //     }
+  //   })
   // }
+  // return routePermissionJudge(routes)
 
-  return routePermissionJudge(routes)
+  return true
+
   // return routePermissionJudge(store.state.user.accessInfo)
 }
 
