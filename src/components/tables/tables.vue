@@ -10,6 +10,11 @@
       <Button @click="handleSearch" class="search-btn" type="primary">
         <Icon type="search"/>&nbsp;&nbsp;搜索
       </Button>
+      <template v-if="canCreate" class="create-button">
+        <Button @click="handleCreate" class="create-btn" type="primary">
+          <Icon type=""/> 新建
+        </Button>
+      </template>
     </div>
     <Table
       ref="tablesMain"
@@ -59,9 +64,13 @@
         <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
       </template>
       <template slot-scope="{row,index}" slot="content_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="content_edit(index)">编辑</Button>
+        <Button type="primary" size="small" style="margin-right: 5px" @click="content_edit(index)">内容编辑</Button>
       </template>
     </Table>
+    <slot name="contentCreateModal"></slot>
+<!--    <Modal v-model="contentCreateModal" title="创建新内容" :loading="contentCreateLoading" @on-ok="asyncCreateContent">-->
+<!--      <content-create-form ></content-create-form>-->
+<!--    </Modal>-->
     <Modal v-model="permissionModal" title="权限修改" :loading="loading" @on-ok="asyncOK">
       <permission-form :formItem="permissionForm"></permission-form>
     </Modal>
@@ -90,6 +99,7 @@
   import TablesEdit from './edit.vue'
   import handleBtns from './handle-btns'
   import PermissionForm from '../../view/form/permissionform'
+  import ContentCreateForm from '../../view/content/contentlist/contentCreateForm'
   import './index.less'
   import Editor from '_c/editor'
 
@@ -102,6 +112,10 @@
       // }
     },
     props: {
+      canCreate:{
+        type: Boolean,
+        default: false
+      },
       value: {
         type: Array,
         default() {
@@ -240,14 +254,19 @@
     },
     components: {
       PermissionForm,
-      Editor
+      Editor,
+      ContentCreateForm
     },
     methods: {
+      roleAsyncOK(){
+
+      },
       contentAsyncOK(){
         let index=this.contentIndex;
-        console.log(index);
+        console.log("index="+index);
         console.log("content="+this.content);
-        console.log("editor="+this.$refs.editor.txt.html())
+        console.log("editor="+this.$refs.editor.html())
+        this.insideTableData[index].content=this.$refs.editor.html();
         // this.insideTableData[index].content=this.content;
       },
       asyncOK() {
@@ -287,6 +306,9 @@
             return attr[i]
           }
         }
+      },
+      handleCreate(){
+
       },
       show(index) {
         // console.log(this.insideTableData[index])

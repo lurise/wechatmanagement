@@ -1,6 +1,13 @@
 <template>
   <Card>
-    <tables ref="tables" editable searchable search-place="top" v-model="contentlist" :columns="columns"></tables>
+    <tables ref="tables" editable searchable search-place="top" v-model="contentlist" :columns="columns">
+      <template v-slot:contentCreateModal>
+        <Modal v-model="contentCreateModal" title="创建新内容" :loading="contentCreateLoading" @on-ok="asyncCreateContent">
+          <p>插槽出来的哟</p>
+        </Modal>
+      </template>
+    </tables>
+    <Button @click="showSlot" type="primary">测试</Button>
   </Card>
 </template>
 
@@ -14,6 +21,8 @@
     },
     data() {
       return {
+        contentCreateModal: false,
+        contentCreateLoading:false,
         columns: [
           {title: '序号', key: 'id', sortable: true},
           {title: '标题', key: 'title'},
@@ -57,6 +66,14 @@
             content: 'def'
           }
         ]
+      }
+    },
+    methods: {
+      showSlot() {
+        this.contentCreateModal = true;
+      },
+      asyncCreateContent(){
+        console.log("async log")
       }
     }
   }
