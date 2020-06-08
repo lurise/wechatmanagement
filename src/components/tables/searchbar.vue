@@ -12,77 +12,12 @@
       </Button>
       <template v-if="canCreate" class="create-button">
         <Button @click="handleCreate" class="create-btn" type="primary">
-          <Icon type=""/> 新建
+          <Icon type=""/>
+          新建
         </Button>
       </template>
     </div>
-    <Table
-      ref="tablesMain"
-      :data="insideTableData"
-      :columns="insideColumns"
-      :stripe="stripe"
-      :border="border"
-      :show-header="showHeader"
-      :width="width"
-      :height="height"
-      :loading="loading"
-      :disabled-hover="disabledHover"
-      :highlight-row="highlightRow"
-      :row-class-name="rowClassName"
-      :size="size"
-      :no-data-text="noDataText"
-      :no-filtered-data-text="noFilteredDataText"
-      @on-current-change="onCurrentChange"
-      @on-select="onSelect"
-      @on-select-cancel="onSelectCancel"
-      @on-select-all="onSelectAll"
-      @on-selection-change="onSelectionChange"
-      @on-sort-change="onSortChange"
-      @on-filter-change="onFilterChange"
-      @on-row-click="onRowClick"
-      @on-row-dblclick="onRowDblclick"
-      @on-expand="onExpand"
-    >
-      <slot name="header" slot="header"></slot>
-      <slot name="footer" slot="footer"></slot>
-      <slot name="loading" slot="loading"></slot>
-      <slot name="rowname" ></slot>
-      <slot name="tableAction"></slot>
-      <template slot-scope="{ row }" slot="name">
-        <strong>{{ row.name }}</strong>
-      </template>
-      <template slot-scope="{ row, index }" slot="permission">
-        <Tag v-for="p in insideTableData[index].permission" :key="p" :color="getColor(p)">{{p}}</Tag>
-        <!--        <Tag color="primary">权限一</Tag>-->
-        <!--        <Tag color="success">权限二</Tag>-->
-        <!--        <Tag color="error">权限三</Tag>-->
-        <!--        <Button type="error" size="small" @click="remove(index)">Delete</Button>-->
-      </template>
-      <template slot-scope="{ row, index }" slot="permission_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">权限编辑</Button>
-        <!--        <Button type="error" size="small" @click="remove(index)">Delete</Button>-->
-      </template>
-      <template slot-scope="{row,index}" slot="role_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
-      </template>
-      <template slot-scope="{row,index}" slot="content_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="content_edit(index)">内容编辑</Button>
-      </template>
-    </Table>
-    <slot name="contentCreateModal"></slot>
-<!--    <Modal v-model="contentCreateModal" title="创建新内容" :loading="contentCreateLoading" @on-ok="asyncCreateContent">-->
-<!--      <content-create-form ></content-create-form>-->
-<!--    </Modal>-->
-    <Modal v-model="permissionModal" title="权限修改" :loading="loading" @on-ok="asyncOK">
-      <permission-form :formItem="permissionForm"></permission-form>
-    </Modal>
-    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
-      <Tree :data="roleTreeData" show-checkbox></Tree>
-    </Modal>
-    <slot name="contentEdit"></slot>
-    <Modal v-model="contentModal" title="内容修改" :loading="loading" @on-ok="contentAsyncOK" width="800">
-      <editor ref="editor" :value="content" :cache="contentCache" />
-    </Modal>
+    <slot name="table"></slot>
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">
@@ -108,17 +43,8 @@
 
 
   export default {
-    name: 'Tables',
-    computed: {
-      // getRoleName: function (rolename) {
-      //   return this.roles[rolename]
-      // }
-    },
+    name: 'searchBar',
     props: {
-      canCreate:{
-        type: Boolean,
-        default: false
-      },
       value: {
         type: Array,
         default() {
@@ -206,20 +132,6 @@
      */
     data() {
       return {
-        contentIndex:0,
-        contentCache:false,
-        content:'',
-        loading: true,
-        roles: new Map([
-          ["SuperAdmin", "超级管理员"],
-          ["Admin", "管理员"],
-          ["Editor", "编辑员"]]),
-        permissionForm: {
-          index: 1,
-          name: '',
-          wechatname: '',
-          permission: []
-        },
         insideColumns: [],
         insideTableData: [],
         edittingCellId: '',
