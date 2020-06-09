@@ -1,16 +1,34 @@
 <template>
   <div>
     <Card>
-      <content-table ref="tables" editable searchable border="true"  search-place="top"
-                     v-model="contentlist" :columns="columns">
+      <content-table
+        ref="tables"
+        :editable="editable"
+        :searchable="searchable"
+        :border="border"
+        :loading="dataLoading"
+        search-place="top"
+        v-model="contentlist"
+        :columns="columns">
       </content-table>
-      <Button @click="showSlot" type="primary">测试</Button>
+      <div class="page">
+        <Page
+          :total="page.total"
+          prev-text="上一页"
+          next-text="下一页"
+          class="content-page"
+          show-sizer="true"
+          @on-change="changePage"
+          @on-page-size-change="changePageSize"/>
+      </div>
     </Card>
+
   </div>
 </template>
 
 <script>
   import ContentTable from '_c/tables/contentTable'
+  import {getContentData} from "../../../api/data";
 
   export default {
     name: "index",
@@ -19,59 +37,68 @@
     },
     data() {
       return {
+        page: {
+          index: 1,
+          size: 10,
+          total: 15
+        },
+        editable: true,
+        searchable: true,
+        border: true,
+        dataLoading: false,
         columns: [
-          {title: '序号', key: 'id', sortable: true},
+          {title: '序号', key: 'id', sortable: true, fixed: 'left'},
           {title: '标题', key: 'title'},
           {title: '所属类别', key: 'category'},
           {
             title: '操作',
             slot: 'content_edit',
+            fixed: 'right',
             width: 150,
             align: 'center'
           }
         ],
-        contentlist: [
-          {
-            id: 1,
-            title: '内容测试',
-            category: '类型1',
-            content: '123'
-          },
-          {
-            id: 2,
-            title: '内容测试2',
-            category: '类型2',
-            content: '456'
-          },
-          {
-            id: 3,
-            title: '内容测试3',
-            category: '类型4',
-            content: '789'
-          },
-          {
-            id: 4,
-            title: '内容测试5',
-            category: '类型5',
-            content: 'abc'
-          },
-          {
-            id: 5,
-            title: '内容测试6',
-            category: '类型6',
-            content: 'def'
-          }
-        ]
+        contentlist: []
       }
     },
     methods: {
       showSlot() {
         this.contentCreateModal = true;
+      },
+      changePage(i) {
+        this.dataLoading = true
+
+        this.page.index = i;
+        getContentData(this.page.index, this.page.size).then(res => {
+          this.contentlist = res.data;
+          this.dataLoading = false;
+        })
+      },
+      changePageSize(i) {
+        this.dataLoading = true
+        this.page.size = i;
+        getContentData(this.page.index, this.page.size).then(res => {
+          this.contentlist = res.data;
+          this.dataLoading = false;
+        });
       }
+    },
+    mounted() {
+      getContentData(this.page.index, this.page.size).then(
+        res => this.contentlist = res.data
+      )
     }
   }
 </script>
 
 <style scoped>
-
+  .content-page {
+    float: right;
+    /*position: fixed;*/
+    margin: 30px 50px auto auto;
+    right: 50px;
+  }
+  .page {
+    height: 45px;
+  }
 </style>

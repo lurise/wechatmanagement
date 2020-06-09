@@ -54,11 +54,11 @@
         <Button type="primary" size="small" style="margin-right: 5px" @click="content_edit(index)">内容编辑</Button>
       </template>
     </Table>
-    <Modal v-model="contentModal" title="内容修改" :loading="loading" @on-ok="contentAsyncOK" width="800">
+    <Modal v-model="contentModal" title="内容修改" :loading="modalLoading" @on-ok="contentAsyncOK" width="800">
       <editor ref="editor" :value="content" :cache="contentCache"/>
     </Modal>
     <a id="hrefToExportTable" style="display: none;width: 0px;height: 0px;"></a>
-    <Page :total="totalPage" prev-text="上一页" next-text="下一页" class="content-page"/>
+
   </div>
 </template>
 
@@ -67,6 +67,7 @@
   import handleBtns from './handle-btns'
   import './index.less'
   import Editor from '_c/editor'
+  import getContentList from '../../api/data'
 
   export default {
     name: 'ContentTable',
@@ -162,7 +163,6 @@
         contentIndex: 0,
         contentCache: false,
         content: '',
-        loading: true,
         insideColumns: [],
         insideTableData: [],
         edittingCellId: '',
@@ -176,6 +176,7 @@
       Editor
     },
     methods: {
+
       contentAsyncOK() {
         let index = this.contentIndex;
         console.log("index=" + index);
@@ -326,11 +327,4 @@
     }
   }
 </script>
-<style scoped>
-  .content-page {
-    display: flex;
-    position: fixed;
-    margin-top: 10px;
-    right: 50px;
-  }
-</style>
+

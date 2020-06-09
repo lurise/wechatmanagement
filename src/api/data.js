@@ -41,6 +41,17 @@ export const getAccessInfo = (token) => {
   })
 }
 
+export const getContentData = (pageindex, pagesize) => {
+  return axios.request({
+    url: 'get_content_data',
+    params: {
+      pageindex,
+      pagesize
+    },
+    method: 'get'
+  })
+}
+
 export const getDragList = () => {
   return axios.request({
     url: 'get_drag_list',
