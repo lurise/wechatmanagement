@@ -25,6 +25,10 @@ export const getUserData = req => {
   return userinfoData
 }
 
+export const postRoleCreateData = req => {
+  return Math.ceil(Math.random()*10)
+}
+
 export const getRoles = req => {
   return Roles
 }
@@ -40,8 +44,8 @@ export const getAccessInfo = req => {
 export const getContentData = (req) => {
   const params = getParams(req.url)
   console.log(params)
-  let pageIndex=params.pageindex
-  let pageSize=params.pagesize
+  let pageIndex = params.pageindex
+  let pageSize = params.pagesize
   console.log("pageindex=" + pageIndex + ",pagesize=" + pageSize)
   if (pageSize * pageIndex < contentList.length) {
     console.log(contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize))

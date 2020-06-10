@@ -52,6 +52,14 @@ export const getContentData = (pageindex, pagesize) => {
   })
 }
 
+export const postRoleCreateData = (formData) => {
+  return axios.request({
+    url: 'create_role',
+    data: formData,
+    method: 'post'
+  })
+}
+
 export const getDragList = () => {
   return axios.request({
     url: 'get_drag_list',

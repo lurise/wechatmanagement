@@ -10,10 +10,11 @@
       <Button @click="handleSearch" class="search-btn" type="primary">
         <Icon type="search"/>&nbsp;&nbsp;搜索
       </Button>
-    </div>
-    <div class="btns">
-      <slot name="createNewRole"></slot>
-      <slot name="deleteRole"></slot>
+      <template v-if="canCreate" class="create-button">
+        <Button @click="handleCreate" class="create-btn" type="primary">
+          <Icon type=""/> 新建
+        </Button>
+      </template>
     </div>
     <Table
       ref="tablesMain"
@@ -31,8 +32,6 @@
       :size="size"
       :no-data-text="noDataText"
       :no-filtered-data-text="noFilteredDataText"
-      :context-menu="contextMenu"
-      :show-context-menu="showContextMenu"
       @on-current-change="onCurrentChange"
       @on-select="onSelect"
       @on-select-cancel="onSelectCancel"
@@ -43,24 +42,22 @@
       @on-row-click="onRowClick"
       @on-row-dblclick="onRowDblclick"
       @on-expand="onExpand"
-      @on-contextmenu="handleContextMenu"
     >
-      <template slot="contextMenu">
-        <DropdownItem @click.native="handleContextMenuEdit">编辑</DropdownItem>
-        <DropdownItem @click.native="handleContextMenuDelete" style="color: #ed4014">删除</DropdownItem>
-      </template>
       <slot name="header" slot="header"></slot>
       <slot name="footer" slot="footer"></slot>
       <slot name="loading" slot="loading"></slot>
       <template slot-scope="{ row }" slot="name">
         <strong>{{ row.name }}</strong>
       </template>
-      <template slot-scope="{row,index}" slot="role_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
+      <template slot-scope="{ row, index }" slot="permission">
+        <Tag v-for="p in insideTableData[index].permission" :key="p" :color="getColor(p)">{{p}}</Tag>
+      </template>
+      <template slot-scope="{ row, index }" slot="permission_edit">
+        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">权限编辑</Button>
       </template>
     </Table>
-    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
-      <Tree :data="roleTreeData" show-checkbox></Tree>
+    <Modal v-model="permissionModal" title="权限修改" :loading="loading" @on-ok="asyncOK">
+      <permission-form :formItem="permissionForm"></permission-form>
     </Modal>
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
@@ -82,7 +79,6 @@
   import handleBtns from './handle-btns'
   import PermissionForm from '../../view/form/permissionform'
   import './index.less'
-  import Editor from '_c/editor'
 
   export default {
     name: 'Tables',
@@ -92,20 +88,19 @@
       // }
     },
     props: {
-
       canCreate: {
         type: Boolean,
         default: false
       },
       value: {
         type: Array,
-        default() {
+        default () {
           return []
         }
       },
       columns: {
         type: Array,
-        default() {
+        default () {
           return []
         }
       },
@@ -124,14 +119,6 @@
         type: Boolean,
         default: false
       },
-      contextMenu: {
-        type: Boolean,
-        default: true
-      },
-      showContextMenu: {
-        type: Boolean,
-        default: true
-      },
       showHeader: {
         type: Boolean,
         default: true
@@ -142,7 +129,7 @@
       },
       rowClassName: {
         type: Function,
-        default() {
+        default () {
           return ''
         }
       },
@@ -190,15 +177,8 @@
      * @on-cancel-edit 返回值 {Object} 同上
      * @on-save-edit 返回值 {Object} ：除上面三个参数外，还有一个value: 修改后的数据
      */
-    data() {
+    data () {
       return {
-
-        contextLine: 0,
-        // loading: true,
-        roles: new Map([
-          ['SuperAdmin', '超级管理员'],
-          ['Admin', '管理员'],
-          ['Editor', '编辑员']]),
         permissionForm: {
           index: 1,
           name: '',
@@ -211,86 +191,42 @@
         edittingText: '',
         searchValue: '',
         searchKey: '',
-        roleModal: false,
-        roleTreeData: [
-          {
-            title: '主页',
-            expand: true,
-            children: [
-              {
-                title: '绑定微信号',
-                expand: true
-              },
-              {
-                title: '角色管理',
-                expand: true
-              },
-              {
-                title: '权限管理',
-                expand: true
-              },
-              {
-                title: '菜单及元素管理',
-                expand: true
-              }
-            ]
-          }
-        ]
+        permissionModal: false,
       }
     },
     components: {
-      PermissionForm,
-      Editor
+      PermissionForm
     },
     methods: {
-      handleContextMenuEdit() {
-        this.roleModal = true
-        this.roleTreeData = this.insideTableData[index].roleInfo
-      },
-      handleContextMenuDelete() {
-
-      },
-      handleContextMenu(row) {
-        const index = this.data1.findIndex(item => item.name === row.name);
-        this.contextLine = index + 1;
-      },
-      roleAsyncOK() {
-
-      },
-      asyncOK() {
+      asyncOK () {
         let index = this.permissionForm.index
         this.insideTableData[index].permission = this.permissionForm.permission
       },
-      getColor(rolename) {
-        if (rolename === 'super_admin') {
-          return 'primary'
-        } else if (rolename === 'admin') {
-          return 'success'
-        } else if (rolename === 'editor') {
-          return 'warning'
-        } else {
-          return 'default'
-        }
-      },
-      roleTreeShow(index) {
-        this.roleModal = true
-        this.roleTreeData = this.insideTableData[index].roleInfo
-      },
-      equalAttr(attr1, attr2) {
+      equalAttr (attr1, attr2) {
         if (attr1.id === attr2.id) {
           return true
         } else {
           return false
         }
       },
-      findObjById(attr, id) {
+      findObjById (attr, id) {
         for (let i = 0; i < attr.length; i++) {
           if (attr[i].id === id) {
             return attr[i]
           }
         }
       },
-      suportEdit(item, index) {
+      show (index) {
+        // console.log(this.insideTableData[index])
+        this.permissionModal = true
+        this.permissionForm = {
+          index: index,
+          name: this.insideTableData[index].name,
+          wechatname: this.insideTableData[index].wechatname,
+          permission: this.insideTableData[index].permission
+        }
+      },
+      suportEdit (item, index) {
         item.render = (h, params) => {
           return h(TablesEdit, {
             props: {
@@ -314,7 +250,7 @@
               'on-save-edit': (params) => {
                 this.value[params.row.initRowIndex][params.column.key] = this.edittingText
                 this.$emit('input', this.value)
-                this.$emit('on-save-edit', Object.assign(params, {value: this.edittingText}))
+                this.$emit('on-save-edit', Object.assign(params, { value: this.edittingText }))
                 this.edittingCellId = ''
               }
             }
@@ -322,7 +258,7 @@
         }
         return item
       },
-      surportHandle(item) {
+      surportHandle (item) {
         let options = item.options || []
         let insideBtns = []
         options.forEach(item => {
@@ -335,7 +271,7 @@
         }
         return item
       },
-      handleColumns(columns) {
+      handleColumns (columns) {
         this.insideColumns = columns.map((item, index) => {
           let res = item
           if (res.editable) res = this.suportEdit(res, index)
@@ -343,71 +279,70 @@
           return res
         })
       },
-      setDefaultSearchKey() {
+      setDefaultSearchKey () {
         this.searchKey = this.columns[0].key !== 'handle' ? this.columns[0].key : (this.columns.length > 1 ? this.columns[1].key : '')
       },
-      handleClear(e) {
+      handleClear (e) {
         if (e.target.value === '') this.insideTableData = this.value
       },
-      handleSearch() {
+      handleSearch () {
         this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1)
       },
-      handleTableData() {
+      handleTableData () {
         this.insideTableData = this.value.map((item, index) => {
           let res = item
           res.initRowIndex = index
           return res
         })
       },
-      exportCsv(params) {
+      exportCsv (params) {
         this.$refs.tablesMain.exportCsv(params)
       },
-      clearCurrentRow() {
+      clearCurrentRow () {
         this.$refs.talbesMain.clearCurrentRow()
       },
-      onCurrentChange(currentRow, oldCurrentRow) {
+      onCurrentChange (currentRow, oldCurrentRow) {
         this.$emit('on-current-change', currentRow, oldCurrentRow)
       },
-      onSelect(selection, row) {
+      onSelect (selection, row) {
         this.$emit('on-select', selection, row)
       },
-      onSelectCancel(selection, row) {
+      onSelectCancel (selection, row) {
         this.$emit('on-select-cancel', selection, row)
       },
-      onSelectAll(selection) {
+      onSelectAll (selection) {
         this.$emit('on-select-all', selection)
       },
-      onSelectionChange(selection) {
+      onSelectionChange (selection) {
         this.$emit('on-selection-change', selection)
       },
-      onSortChange(column, key, order) {
+      onSortChange (column, key, order) {
         this.$emit('on-sort-change', column, key, order)
       },
-      onFilterChange(row) {
+      onFilterChange (row) {
         this.$emit('on-filter-change', row)
       },
-      onRowClick(row, index) {
+      onRowClick (row, index) {
         this.$emit('on-row-click', row, index)
       },
-      onRowDblclick(row, index) {
-        this.roleTreeShow(index);
-        this.$emit('on-row-dblclick', row, index);
+      onRowDblclick (row, index) {
+        this.$emit('on-row-dblclick', row, index)
       },
-      onExpand(row, status) {
+      onExpand (row, status) {
         this.$emit('on-expand', row, status)
       }
     },
     watch: {
-      columns(columns) {
+      columns (columns) {
         this.handleColumns(columns)
         this.setDefaultSearchKey()
       },
-      value(val) {
+      value (val) {
         this.handleTableData()
         if (this.searchable) this.handleSearch()
       }
     },
-    mounted() {
+    mounted () {
       this.handleColumns(this.columns)
       this.setDefaultSearchKey()
       this.handleTableData()

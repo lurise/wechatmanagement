@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Tables from '_c/tables'
+import Tables from '_c/tables/permissionTable'
 import { getUserData } from '@/api/data'
 import { getRoles } from '../../api/data'
 
