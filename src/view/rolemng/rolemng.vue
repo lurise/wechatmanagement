@@ -9,8 +9,7 @@
               :loading="roleLoading"
               v-model="tableData"
               :columns="columns"
-              :contextMenu="contextMenu"
-              :showContextMenu="showContextMenu"
+              :selectItems="selectionItems"
       >
         <template slot="createNewRole">
           <Button class="create-btn" type="primary" @click="handleCreate">
@@ -24,7 +23,8 @@
         </template>
       </tables>
     </Card>
-    <Modal v-model="deleteRoleModal" title="确认删除" @on-ok="roleDeleteAsyncOK">
+    <Modal ref="roleDelete" v-model="deleteRoleModal" title="确认删除" :loading="deleteRoleLoding"
+           @on-ok="roleDeleteAsyncOK">
       <p>确定删除所选角色么？</p>
     </Modal>
     <Modal v-model="createNewRoleModal" title="创建新角色" :loading="roleCreateLoading" @on-ok="roleCreateAsyncOK">
@@ -65,6 +65,7 @@
 
 
   export default {
+
     name: 'rolemng',
     components: {
       Tables,
@@ -72,8 +73,10 @@
     },
     data() {
       return {
-        contextMenu:true,
-        showContextMenu:true,
+        selectionItems: [],
+        deleteRoleModal: false,
+        contextMenu: true,
+        showContextMenu: true,
         hasCreate: false,
         formItem: {
           id: Number,
@@ -105,6 +108,7 @@
         },
         roleLoading: false,
         roleCreateLoading: true,
+        deleteRoleLoding: true,
         createNewRoleModal: false,
         tableData: [],
         columns: [
@@ -113,8 +117,8 @@
             width: 60,
             align: 'center'
           },
-          {title: '序号', key: 'id',align: 'center'},
-          {title: '角色名', key: 'roleName', sortable: true,align: 'center'},
+          {title: '序号', key: 'id', align: 'center'},
+          {title: '角色名', key: 'roleName', sortable: true, align: 'center'},
           {
             title: '操作',
             slot: 'role_edit',
@@ -134,8 +138,19 @@
       )
     },
     methods: {
-      handleDelete(){
-
+      handleDelete() {
+        this.deleteRoleModal = true;
+      },
+      roleDeleteAsyncOK() {
+        this.deleteRoleLoding = true;
+        this.$refs.tables.deleteSelection()
+        this.roleLoading = true
+        getRoleInfo().then(
+          res => {
+            this.tableData = res.data
+            this.roleLoading = false
+          }
+        )
       },
       handleCreate() {
         if (this.hasCreate) {
@@ -145,12 +160,9 @@
         }
         this.createNewRoleModal = true
       },
-      roleDeleteAysncOK(){
-
-      },
       roleCreateAsyncOK() {
         this.roleCreateLoading = true;
-        console.log(this.formItem.roleName)
+        // console.log(this.formItem.roleName)
         if (this.formItem.roleName === '') {
           this.$Message.error("请输入角色名");
           this.roleCreateLoading = false;
@@ -182,12 +194,12 @@
 <style scoped>
   .create-btn {
     /*float: left;*/
-    margin-left: 50px;
+    margin-left: 10px;
 
   }
 
-  .delete-btn{
-    float:right;
-    margin-right: 50px;
+  .delete-btn {
+    /*float:right;*/
+    margin-left: 10px;
   }
 </style>

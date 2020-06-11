@@ -11,7 +11,8 @@ import {
   getTreeSelectData,
   getAccessInfo,
   getContentData,
-  postRoleCreateData
+  postRoleCreateData,
+  postRoleDeleteData
 } from './data'
 import {getMessageInit, getContentByMsgId, hasRead, removeReaded, restoreTrash, messageCount} from './user'
 
@@ -25,6 +26,7 @@ Mock.mock(/\/login/, login)
 Mock.mock(/\/get_info/, getUserInfo)
 Mock.mock(/\/get_content_data/, getContentData)
 Mock.mock(/\/create_role/, postRoleCreateData)
+Mock.mock(/\/delete_role/, postRoleDeleteData)
 Mock.mock(/\/logout/, logout)
 Mock.mock(/\/get_table_data/, getTableData)
 Mock.mock(/\/get_user_data/, getUserData)

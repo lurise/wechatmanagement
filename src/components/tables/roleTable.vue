@@ -83,6 +83,7 @@
   import PermissionForm from '../../view/form/permissionform'
   import './index.less'
   import Editor from '_c/editor'
+  import {deleteRole} from '../../api/data'
 
   export default {
     name: 'Tables',
@@ -92,7 +93,6 @@
       // }
     },
     props: {
-
       canCreate: {
         type: Boolean,
         default: false
@@ -192,7 +192,7 @@
      */
     data() {
       return {
-
+        selectItems: [],
         contextLine: 0,
         // loading: true,
         roles: new Map([
@@ -368,7 +368,23 @@
       onCurrentChange(currentRow, oldCurrentRow) {
         this.$emit('on-current-change', currentRow, oldCurrentRow)
       },
+      deleteSelection() {
+        deleteRole(this.selectItems).then(
+          res => {
+            console.log("status=" + res.data)
+            if (res.data.status === 200) {
+              this.$Message.info("删除成功");
+            } else {
+              this.$Message.error("服务器发生错误，未能删除成功，请稍后再试")
+            }
+            this.$refs.roleDelete.loading=false;
+          }
+        ).catch(e => {
+          this.$Message.error("未能删除角色，请稍后再试:" + e)
+        })
+      },
       onSelect(selection, row) {
+        this.selectItems = selection;
         this.$emit('on-select', selection, row)
       },
       onSelectCancel(selection, row) {

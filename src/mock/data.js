@@ -25,8 +25,17 @@ export const getUserData = req => {
   return userinfoData
 }
 
+export const postRoleDeleteData = req => {
+  let selectItem=JSON.parse(req.body).selectItems
+  console.log(selectItem)
+  return {
+    status: 500,
+    id: [1, 2, 3]
+  }
+}
+
 export const postRoleCreateData = req => {
-  return Math.ceil(Math.random()*10)
+  return Math.ceil(Math.random() * 10)
 }
 
 export const getRoles = req => {

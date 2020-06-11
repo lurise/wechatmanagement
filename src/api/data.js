@@ -60,6 +60,14 @@ export const postRoleCreateData = (formData) => {
   })
 }
 
+export const deleteRole = (deleteItems) => {
+  return axios.request({
+    url: 'delete_role',
+    data: deleteItems,
+    method: 'post'
+  })
+}
+
 export const getDragList = () => {
   return axios.request({
     url: 'get_drag_list',

@@ -19,6 +19,7 @@ import 'v-org-tree/dist/v-org-tree.css'
 /* eslint-disable */
 if (process.env.NODE_ENV !== 'production') require('@/mock')
 
+// Vue.use(ViewUI);
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
