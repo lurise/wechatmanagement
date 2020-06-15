@@ -91,7 +91,7 @@ export default [
         icon: 'ios-bookmark',
         title: '内容列表'
       },
-      component: () => import('@/view/content/contentlist')
+      component: () => import('@/view/content/contentlist/contentlist.vue')
     },
       {
         path: 'contentreview',

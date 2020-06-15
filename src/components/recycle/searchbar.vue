@@ -10,58 +10,14 @@
       <Button @click="handleSearch" class="search-btn" type="primary">
         <Icon type="search"/>&nbsp;&nbsp;搜索
       </Button>
+      <template v-if="canCreate" class="create-button">
+        <Button @click="handleCreate" class="create-btn" type="primary">
+          <Icon type=""/>
+          新建
+        </Button>
+      </template>
     </div>
-    <div class="btns">
-      <slot name="createNewRole"></slot>
-      <slot name="deleteRole"></slot>
-    </div>
-    <Table
-      ref="tablesMain"
-      :data="insideTableData"
-      :columns="insideColumns"
-      :stripe="stripe"
-      :border="border"
-      :show-header="showHeader"
-      :width="width"
-      :height="height"
-      :loading="loading"
-      :disabled-hover="disabledHover"
-      :highlight-row="highlightRow"
-      :row-class-name="rowClassName"
-      :size="size"
-      :no-data-text="noDataText"
-      :no-filtered-data-text="noFilteredDataText"
-      :context-menu="contextMenu"
-      :show-context-menu="showContextMenu"
-      @on-current-change="onCurrentChange"
-      @on-select="onSelect"
-      @on-select-cancel="onSelectCancel"
-      @on-select-all="onSelectAll"
-      @on-selection-change="onSelectionChange"
-      @on-sort-change="onSortChange"
-      @on-filter-change="onFilterChange"
-      @on-row-click="onRowClick"
-      @on-row-dblclick="onRowDblclick"
-      @on-expand="onExpand"
-      @on-contextmenu="handleContextMenu"
-    >
-      <template slot="contextMenu">
-        <DropdownItem @click.native="handleContextMenuEdit">编辑</DropdownItem>
-        <DropdownItem @click.native="handleContextMenuDelete" style="color: #ed4014">删除</DropdownItem>
-      </template>
-      <slot name="header" slot="header"></slot>
-      <slot name="footer" slot="footer"></slot>
-      <slot name="loading" slot="loading"></slot>
-      <template slot-scope="{ row }" slot="name">
-        <strong>{{ row.name }}</strong>
-      </template>
-      <template slot-scope="{row,index}" slot="role_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
-      </template>
-    </Table>
-    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
-      <Tree :data="roleTreeData" show-checkbox></Tree>
-    </Modal>
+    <slot name="table"></slot>
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">
@@ -78,25 +34,17 @@
 </template>
 
 <script>
-  import TablesEdit from './edit.vue'
-  import handleBtns from './handle-btns'
+  import TablesEdit from '../tables/edit.vue'
+  import handleBtns from '../tables/handle-btns'
   import PermissionForm from '../../view/form/permissionform'
-  import './index.less'
+  import ContentCreateForm from '../../view/content/contentlist/contentCreateForm'
+  import '../tables/index.less'
   import Editor from '_c/editor'
-  import {deleteRole} from '../../api/data'
+
 
   export default {
-    name: 'Tables',
-    computed: {
-      // getRoleName: function (rolename) {
-      //   return this.roles[rolename]
-      // }
-    },
+    name: 'searchBar',
     props: {
-      canCreate: {
-        type: Boolean,
-        default: false
-      },
       value: {
         type: Array,
         default() {
@@ -123,14 +71,6 @@
       border: {
         type: Boolean,
         default: false
-      },
-      contextMenu: {
-        type: Boolean,
-        default: true
-      },
-      showContextMenu: {
-        type: Boolean,
-        default: true
       },
       showHeader: {
         type: Boolean,
@@ -192,26 +132,15 @@
      */
     data() {
       return {
-        selectItems: [],
-        contextLine: 0,
-        // loading: true,
-        roles: new Map([
-          ['SuperAdmin', '超级管理员'],
-          ['Admin', '管理员'],
-          ['Editor', '编辑员']]),
-        permissionForm: {
-          index: 1,
-          name: '',
-          wechatname: '',
-          permission: []
-        },
         insideColumns: [],
         insideTableData: [],
         edittingCellId: '',
         edittingText: '',
         searchValue: '',
         searchKey: '',
+        permissionModal: false,
         roleModal: false,
+        contentModal:false,
         roleTreeData: [
           {
             title: '主页',
@@ -232,7 +161,7 @@
               {
                 title: '菜单及元素管理',
                 expand: true
-              }
+              },
             ]
           }
         ]
@@ -240,22 +169,20 @@
     },
     components: {
       PermissionForm,
-      Editor
+      Editor,
+      ContentCreateForm
     },
     methods: {
-      handleContextMenuEdit() {
-        this.roleModal = true
-        this.roleTreeData = this.insideTableData[index].roleInfo
-      },
-      handleContextMenuDelete() {
+      roleAsyncOK(){
 
       },
-      handleContextMenu(row) {
-        const index = this.data1.findIndex(item => item.name === row.name);
-        this.contextLine = index + 1;
-      },
-      roleAsyncOK() {
-
+      contentAsyncOK(){
+        let index=this.contentIndex;
+        console.log("index="+index);
+        console.log("content="+this.content);
+        console.log("editor="+this.$refs.editor.html())
+        this.insideTableData[index].content=this.$refs.editor.html();
+        // this.insideTableData[index].content=this.content;
       },
       asyncOK() {
         let index = this.permissionForm.index
@@ -273,8 +200,13 @@
         }
       },
       roleTreeShow(index) {
-        this.roleModal = true
-        this.roleTreeData = this.insideTableData[index].roleInfo
+        this.roleModal = true;
+        this.roleTreeData =this.insideTableData[index].roleInfo;
+      },
+      content_edit(index){
+        this.contentIndex=index;
+        this.contentModal=true;
+        this.$refs.editor.setHtml(this.insideTableData[index].content);
       },
       equalAttr(attr1, attr2) {
         if (attr1.id === attr2.id) {
@@ -283,12 +215,25 @@
           return false
         }
       },
-      findObjById(attr, id) {
-        for (let i = 0; i < attr.length; i++) {
-          if (attr[i].id === id) {
+      findObjById(attr,id){
+        for(let i=0;i<attr.length;i++){
+          if(attr[i].id===id){
             return attr[i]
           }
         }
+      },
+      handleCreate(){
+
+      },
+      show(index) {
+        // console.log(this.insideTableData[index])
+        this.permissionModal = true;
+        this.permissionForm = {
+          index: index,
+          name: this.insideTableData[index].name,
+          wechatname: this.insideTableData[index].wechatname,
+          permission: this.insideTableData[index].permission
+        };
       },
       suportEdit(item, index) {
         item.render = (h, params) => {
@@ -368,23 +313,7 @@
       onCurrentChange(currentRow, oldCurrentRow) {
         this.$emit('on-current-change', currentRow, oldCurrentRow)
       },
-      deleteSelection() {
-        deleteRole(this.selectItems).then(
-          res => {
-            console.log("status=" + res.data)
-            if (res.data.status === 200) {
-              this.$Message.info("删除成功");
-            } else {
-              this.$Message.error("服务器发生错误，未能删除成功，请稍后再试")
-            }
-            this.$refs.roleDelete.loading=false;
-          }
-        ).catch(e => {
-          this.$Message.error("未能删除角色，请稍后再试:" + e)
-        })
-      },
       onSelect(selection, row) {
-        this.selectItems = selection;
         this.$emit('on-select', selection, row)
       },
       onSelectCancel(selection, row) {
@@ -406,8 +335,7 @@
         this.$emit('on-row-click', row, index)
       },
       onRowDblclick(row, index) {
-        this.roleTreeShow(index);
-        this.$emit('on-row-dblclick', row, index);
+        this.$emit('on-row-dblclick', row, index)
       },
       onExpand(row, status) {
         this.$emit('on-expand', row, status)

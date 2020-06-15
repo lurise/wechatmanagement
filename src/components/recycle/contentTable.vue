@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import TablesEdit from './edit.vue'
-import handleBtns from './handle-btns'
-import './index.less'
+import TablesEdit from '_c/tables/edit.vue'
+import handleBtns from '_c/tables/handle-btns'
+import '_c/tables/index.less'
 import Editor from '_c/editor'
 // import getContentList from '../../api/data'
 

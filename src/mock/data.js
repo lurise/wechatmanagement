@@ -26,11 +26,14 @@ export const getUserData = req => {
 }
 
 export const postRoleDeleteData = req => {
-  let selectItem=JSON.parse(req.body).selectItems
-  console.log(selectItem)
+  let selectItem = JSON.parse(req.body)
+  let indices = []
+  for (let i = 0; i < selectItem.length; i++) {
+    indices.push(selectItem[i].roleName)
+  }
   return {
-    status: 500,
-    id: [1, 2, 3]
+    status: 200,
+    roleName: indices
   }
 }
 
@@ -58,12 +61,17 @@ export const getContentData = (req) => {
   console.log("pageindex=" + pageIndex + ",pagesize=" + pageSize)
   if (pageSize * pageIndex < contentList.length) {
     console.log(contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize))
-    return contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize)
+    return {
+      total: contentList.length,
+      contentlist: contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize)
+    }
   } else {
     console.log(contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize))
-    return contentList.slice(contentList.length - pageSize, contentList.length)
+    return{
+      total: contentList.length,
+      contentlist: contentList.slice(contentList.length - pageSize, contentList.length)
+    }
   }
-
 }
 
 export const getDragList = req => {

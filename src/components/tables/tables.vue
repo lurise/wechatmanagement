@@ -10,11 +10,6 @@
       <Button @click="handleSearch" class="search-btn" type="primary">
         <Icon type="search"/>&nbsp;&nbsp;搜索
       </Button>
-      <template v-if="canCreate" class="create-button">
-        <Button @click="handleCreate" class="create-btn" type="primary">
-          <Icon type=""/> 新建
-        </Button>
-      </template>
     </div>
     <Table
       ref="tablesMain"
@@ -46,39 +41,7 @@
       <slot name="header" slot="header"></slot>
       <slot name="footer" slot="footer"></slot>
       <slot name="loading" slot="loading"></slot>
-      <slot name="rowname" ></slot>
-      <slot name="tableAction"></slot>
-      <template slot-scope="{ row }" slot="name">
-        <strong>{{ row.name }}</strong>
-      </template>
-      <template slot-scope="{ row, index }" slot="permission">
-        <Tag v-for="p in insideTableData[index].permission" :key="p" :color="getColor(p)">{{p}}</Tag>
-      </template>
-      <template slot-scope="{ row, index }" slot="permission_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">权限编辑</Button>
-      </template>
-      <template slot-scope="{row,index}" slot="role_edit">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="roleTreeShow(index)">角色编辑</Button>
-      </template>
-      <template slot-scope="{row,index}" slot="content_edit">
-        <Button ref="contentEdit" type="primary" size="small" style="margin-right: 5px" @click="content_edit(index)">内容编辑</Button>
-      </template>
     </Table>
-    <slot name="contentCreateModal"></slot>
-<!--    <Modal v-model="contentCreateModal" title="创建新内容" :loading="contentCreateLoading" @on-ok="asyncCreateContent">-->
-<!--      <content-create-form ></content-create-form>-->
-<!--    </Modal>-->
-    <Modal v-model="permissionModal" title="权限修改" :loading="loading" @on-ok="asyncOK">
-      <permission-form :formItem="permissionForm"></permission-form>
-    </Modal>
-    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
-      <Tree :data="roleTreeData" show-checkbox></Tree>
-    </Modal>
-    <slot name="contentEdit"></slot>
-<!--    <Modal v-model="contentModal" title="内容修改" :loading="loading" @on-ok="contentAsyncOK" width="800">-->
-<!--      <editor ref="editor" :value="content" :cache="contentCache" />-->
-      <slot name="contentModalSlot" :data="contentIndex,contentModal"></slot>
-<!--    </Modal>-->
     <div v-if="searchable && searchPlace === 'bottom'" class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">
@@ -97,20 +60,15 @@
 <script>
 import TablesEdit from './edit.vue'
 import handleBtns from './handle-btns'
-import PermissionForm from '../../view/form/permissionform'
-import ContentCreateForm from '../../view/content/contentlist/contentCreateForm'
 import './index.less'
 import Editor from '_c/editor'
 
 export default {
   name: 'Tables',
   computed: {
-    // getRoleName: function (rolename) {
-    //   return this.roles[rolename]
-    // }
+
   },
   props: {
-    content,
     canCreate: {
       type: Boolean,
       default: false
@@ -202,10 +160,6 @@ export default {
      */
   data () {
     return {
-      contentIndex: 0,
-      contentCache: false,
-      // content: '',
-      // loading: true,
       roles: new Map([
         ['SuperAdmin', '超级管理员'],
         ['Admin', '管理员'],
@@ -221,77 +175,13 @@ export default {
       edittingCellId: '',
       edittingText: '',
       searchValue: '',
-      searchKey: '',
-      permissionModal: false,
-
-      contentModal: false,
-      roleTreeData: [
-        {
-          title: '主页',
-          expand: true,
-          children: [
-            {
-              title: '绑定微信号',
-              expand: true
-            },
-            {
-              title: '角色管理',
-              expand: true
-            },
-            {
-              title: '权限管理',
-              expand: true
-            },
-            {
-              title: '菜单及元素管理',
-              expand: true
-            }
-          ]
-        }
-      ]
+      searchKey: ''
     }
   },
   components: {
-    PermissionForm,
     Editor,
-    ContentCreateForm
   },
   methods: {
-    roleAsyncOK () {
-
-    },
-    contentAsyncOK () {
-      let index = this.contentIndex
-      console.log('index=' + index)
-      console.log('content=' + this.content)
-      console.log('editor=' + this.$refs.editor.html())
-      this.insideTableData[index].content = this.$refs.editor.html()
-      // this.insideTableData[index].content=this.content;
-    },
-    asyncOK () {
-      let index = this.permissionForm.index
-      this.insideTableData[index].permission = this.permissionForm.permission
-    },
-    getColor (rolename) {
-      if (rolename === 'super_admin') {
-        return 'primary'
-      } else if (rolename === 'admin') {
-        return 'success'
-      } else if (rolename === 'editor') {
-        return 'warning'
-      } else {
-        return 'default'
-      }
-    },
-    roleTreeShow (index) {
-      this.roleModal = true
-      this.roleTreeData = this.insideTableData[index].roleInfo
-    },
-    content_edit (index) {
-      this.contentIndex = index
-      // this.contentModal=true;
-      // this.$refs.editor.setHtml(this.insideTableData[index].content);
-    },
     equalAttr (attr1, attr2) {
       if (attr1.id === attr2.id) {
         return true
@@ -304,19 +194,6 @@ export default {
         if (attr[i].id === id) {
           return attr[i]
         }
-      }
-    },
-    handleCreate () {
-
-    },
-    show (index) {
-      // console.log(this.insideTableData[index])
-      this.permissionModal = true
-      this.permissionForm = {
-        index: index,
-        name: this.insideTableData[index].name,
-        wechatname: this.insideTableData[index].wechatname,
-        permission: this.insideTableData[index].permission
       }
     },
     suportEdit (item, index) {

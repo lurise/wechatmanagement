@@ -11,17 +11,16 @@
               :columns="columns"
               :selectItems="selectionItems"
       >
-        <template slot="header">
+        <template slot="createNewRole">
           <Button class="create-btn" type="primary" @click="handleCreate">
             创建角色
           </Button>
+        </template>
+        <template slot="deleteRole">
           <Button class="delete-btn" type="warning" @click="handleDelete">
             删除角色
           </Button>
         </template>
-<!--        <template slot="footer">22</template>-->
-        <template slot="loading">获取角色信息中，请稍后</template>
-
       </tables>
     </Card>
     <Modal ref="roleDelete" v-model="deleteRoleModal" title="确认删除" :loading="deleteRoleLoding"
@@ -31,16 +30,13 @@
     <Modal v-model="createNewRoleModal" title="创建新角色" :loading="roleCreateLoading" @on-ok="roleCreateAsyncOK">
       <roleCreateFrom :formItem="formItem"></roleCreateFrom>
     </Modal>
-    <Modal v-model="roleModal" title="角色修改" :loading="loading" @on-ok="roleAsyncOK">
-      <Tree :data="roleTreeData" show-checkbox></Tree>
-    </Modal>
   </div>
 </template>
 
 <script>
-  import Tables from '_c/tables'
+  import Tables from '_c/recycle/roleTable'
   import {getRoleInfo, postRoleCreateData} from '@/api/data'
-  import roleCreateFrom from '../../view/form/roleCreateFrom'
+  import roleCreateFrom from '../form/roleCreateFrom'
 
   const roleInfo = [
     {
@@ -77,8 +73,6 @@
     },
     data() {
       return {
-        roleModal: false,
-        roleTreeData: [],
         selectionItems: [],
         deleteRoleModal: false,
         contextMenu: true,
@@ -123,31 +117,13 @@
             width: 60,
             align: 'center'
           },
-          {tytle: '序号', type: 'index', align: 'center', width: 60},
+          {tytle:'序号',type: 'index', align: 'center',width: 60},
           {title: '角色名', key: 'roleName', sortable: true, align: 'center'},
           {
             title: '操作',
-            key: 'action',
+            slot: 'role_edit',
             width: 150,
-            align: 'center',
-            render: (h, params) => {
-              return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  styles: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.roleTreeShow(params.index)
-                    }
-                  }
-                }, '编辑角色')
-              ])
-            }
+            align: 'center'
           }
         ]
       }
@@ -162,10 +138,6 @@
       )
     },
     methods: {
-      roleTreeShow(index) {
-        this.roleModal = true;
-        this.roleTreeData = this.tableData[index].roleInfo
-      },
       handleDelete() {
         this.deleteRoleModal = true;
       },
@@ -188,9 +160,6 @@
           this.hasCreate = false;
         }
         this.createNewRoleModal = true
-      },
-      roleAsyncOK() {
-
       },
       roleCreateAsyncOK() {
         this.roleCreateLoading = true;

@@ -14,7 +14,7 @@
   </Form>
 </template>
 <script>
-import { getRoles } from '../../api/data'
+import { getRoles } from '@/api/data'
 
 export default {
   name: 'PermmisionForm',
