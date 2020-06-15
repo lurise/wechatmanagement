@@ -114,9 +114,6 @@ export default {
         return ''
       }
     },
-    context: {
-      type: Object
-    },
     noDataText: {
       type: String
     },
@@ -179,7 +176,7 @@ export default {
     }
   },
   components: {
-    Editor,
+    Editor
   },
   methods: {
     equalAttr (attr1, attr2) {
