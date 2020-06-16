@@ -55,10 +55,10 @@ export const getAccessInfo = req => {
 
 export const getContentData = (req) => {
   const params = getParams(req.url)
-  console.log(params)
+  // console.log(params)
   let pageIndex = params.pageindex
   let pageSize = params.pagesize
-  console.log("pageindex=" + pageIndex + ",pagesize=" + pageSize)
+  // console.log("pageindex=" + pageIndex + ",pagesize=" + pageSize)
   if (pageSize * pageIndex < contentList.length) {
     console.log(contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize))
     return {
@@ -71,6 +71,18 @@ export const getContentData = (req) => {
       total: contentList.length,
       contentlist: contentList.slice(contentList.length - pageSize, contentList.length)
     }
+  }
+}
+
+export const deleteContent=(req)=>{
+  return {
+    status:200
+  }
+}
+
+export const postContentCreateData=(req)=>{
+  return {
+    status:200
   }
 }
 

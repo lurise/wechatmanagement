@@ -12,7 +12,9 @@ import {
   getAccessInfo,
   getContentData,
   postRoleCreateData,
-  postRoleDeleteData
+  postRoleDeleteData,
+  postContentCreateData,
+  deleteContent
 } from './data'
 import {getMessageInit, getContentByMsgId, hasRead, removeReaded, restoreTrash, messageCount} from './user'
 
@@ -27,6 +29,8 @@ Mock.mock(/\/get_info/, getUserInfo)
 Mock.mock(/\/get_content_data/, getContentData)
 Mock.mock(/\/create_role/, postRoleCreateData)
 Mock.mock(/\/delete_role/, postRoleDeleteData)
+Mock.mock(/\/delete_content/, deleteContent)
+Mock.mock(/\/create_content/, postContentCreateData)
 Mock.mock(/\/logout/, logout)
 Mock.mock(/\/get_table_data/, getTableData)
 Mock.mock(/\/get_user_data/, getUserData)

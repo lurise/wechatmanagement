@@ -56,6 +56,12 @@
       },
       html() {
         return this.editor.txt.html()
+      },
+      text() {
+        return this.editor.txt.text()
+      },
+      setText(val) {
+        this.editor.txt.text(val)
       }
     },
     mounted() {

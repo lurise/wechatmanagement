@@ -3,7 +3,6 @@
     <Card>
       <tables
         ref="tables"
-        editable
         searchable
         search-place="top"
         :loading="permissionLoding"

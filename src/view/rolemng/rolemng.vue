@@ -136,7 +136,7 @@ export default {
           align: 'center'
         },
         { tytle: '序号', type: 'index', align: 'center', width: 60 },
-        { title: '角色名', key: 'roleName', sortable: true, align: 'center' },
+        { title: '角色名', key: 'roleName', sortable: true, align: 'center', editable: true },
         {
           title: '操作',
           key: 'action',
