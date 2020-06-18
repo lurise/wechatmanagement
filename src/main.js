@@ -15,6 +15,22 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
+
+//引入 Froala Editor js file.
+require('froala-editor/js/froala_editor.pkgd.min')
+//引入中文语言包
+require('froala-editor/js/languages/zh_cn')
+//引入 Froala Editor css files.
+require('froala-editor/css/froala_editor.pkgd.min.css')
+require('font-awesome/css/font-awesome.css')
+require('froala-editor/css/froala_style.min.css')
+
+// Import and use Vue Froala lib.
+import jQuery from 'jquery'
+import VueFroala from 'vue-froala-wysiwyg'
+window.$ = jQuery
+Vue.use(VueFroala)
+
 // 实际打包时应该不引入mock
 /* eslint-disable */
 if (process.env.NODE_ENV !== 'production') require('@/mock')

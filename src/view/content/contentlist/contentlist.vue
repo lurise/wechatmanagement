@@ -33,7 +33,8 @@
       </div>
     </Card>
     <Modal v-model="contentModal" title="内容修改" :loading="modalLoading" @on-ok="contentAsyncOK" width="800">
-      <editor ref="editor" :value="content" :cache="contentCache"/>
+      <!--      <editor ref="editor" :value="content" :cache="contentCache"/>-->
+      <froala :tag="textarea" :config="froalaConfig" v-model="froalaContent"></froala>
     </Modal>
     <Modal v-model="contentCreateModal" title="创建新内容" :loading="createModalLoading" width="800"
            @on-ok="contentCreateAsyncOK">
@@ -50,7 +51,9 @@
   import Tables from '_c/tables/tables'
   import {getContentData, postContentCreateData, deleteContent} from '@/api/data'
   import Editor from '_c/editor'
-  import CreateForm from "./contentCreateForm";
+  import CreateForm from "./contentCreateForm"
+  import jQuery from 'jquery'
+  import VueFroala from 'vue-froala-wysiwyg'
 
   export default {
     name: 'contentlist',
@@ -61,6 +64,43 @@
     },
     data() {
       return {
+        froalaConfig: {
+          toolbarButtons: ['undo', 'redo', 'clearFormatting', '|', 'bold', 'italic', 'underline', 'strikeThrough', '|', 'fontFamily', 'fontSize',
+            'color', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo',
+            'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', '|', 'print', 'spellChecker', 'help',
+            '|', 'fullscreen'],
+
+
+          // theme: "dark",//主题
+
+          placeholder: "请填写内容",
+          language: "zh_cn",//国际化
+
+          imageUploadURL: "http://i.froala.com/upload",//上传url
+
+          fileUploadURL: "http://i.froala.com/upload",//上传url 更多上传介绍 请访问https://www.froala.com/wysiwyg-editor/docs/options
+
+          quickInsertButtons: ['image', 'table', 'ul', 'ol', 'hr'],//快速插入项
+
+          // toolbarVisibleWithoutSelection: true,//是否开启 不选中模式
+
+          // disableRightClick: true,//是否屏蔽右击
+
+          colorsHEXInput: false,//关闭16进制色值
+
+          toolbarSticky: true,//操作栏是否自动吸顶
+
+          zIndex: 99999,
+          height: 400,
+
+          events: {
+            'froalaEditor.initialized':
+              function () {
+                console.log('initialized')
+              }
+          },
+        },
+        froalaContent: "123",//默认测试文本
         selectItems: [],
         contentDeleteModal: false,
         deleteModalLoading: false,
@@ -167,13 +207,13 @@
       },
       contentCreateAsyncOK() {
         this.dataLoading = true;
-
-        this.formItem.contentTxt = this.$refs.createForm.text()
-        this.formItem.content = this.$refs.createForm.html()
+        // this.formItem.contentTxt = this.$refs.createForm.text()
+        // this.formItem.content = this.$refs.createForm.html()
+        // console.log(this.formItem.content)
         // let date = new Date();
         // this.formItem.createTime = date.format("yyyy-mm-dd");
 
-        postContentCreateData().then(res => {
+        postContentCreateData(this.formItem).then(res => {
           if (res.status === 200) {
             this.$Message.info("内容创建成功！")
             this.hasCreate = true;
@@ -233,12 +273,18 @@
       },
       contentAsyncOK() {
         let index = this.contentIndex
-        this.contentlist[index].content = this.$refs.editor.html()
+        console.log(index)
+        console.log(this.froalaContent)
+        // this.contentlist[index].content = this.$refs.editor.html()
+        // console.log(this.$refs.editor.html())
+        this.contentlist[index].content = this.froalaContent
       },
       contentEdit(index) {
         this.contentIndex = index
         this.contentModal = true
-        this.$refs.editor.setHtml(this.contentlist[index].content)
+        // this.$refs.editor.setHtml(this.contentlist[index].content)
+        this.froalaContent = this.contentlist[index].content
+        // console.log(this.froalaContent)
       },
       handleCreate() {
         console.log('new content create')
