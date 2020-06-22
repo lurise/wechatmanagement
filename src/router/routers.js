@@ -167,7 +167,7 @@ export default [
           icon: 'ios-document',
           title: '模板管理'
         },
-        component: () => import('@/view/join-page.vue')
+        component: () => import('@/view/template/templist.vue')
       },
       {
         path: 'material',

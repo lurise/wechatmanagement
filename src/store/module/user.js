@@ -145,12 +145,10 @@ export default {
           {
             getAccessInfo(state.token).then(res => {
               const data = res.data
-              console.log(data)
               commit('setAccessInfo', data)
               commit('setHasGetAccessInfo', true)
               resolve(data)
             })
-            console.log("getted the accessInfo,and the accessInfo is:" + state.accessInfo)
           }
         } catch (e) {
           reject(e)
