@@ -14,6 +14,13 @@ export const getUserData = () => {
   })
 }
 
+export const getTemlData = () => {
+  return axios.request({
+    url: 'get_temp_data',
+    method: 'get'
+  })
+}
+
 export const getRoles = () => {
   return axios.request({
     url: 'get_roles',

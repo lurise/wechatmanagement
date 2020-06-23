@@ -3,6 +3,7 @@ import {doCustomTimes} from '@/libs/util'
 import orgData from './data/org-data'
 import {contentList} from './data/content-data'
 import {treeData} from './data/tree-select'
+import {templateData} from './data/template-data'
 import {userinfoData, Roles, RoleInfo, accessInfo} from './data/userinfo-data'
 import {getParams} from "../libs/util";
 
@@ -23,6 +24,10 @@ export const getTableData = req => {
 
 export const getUserData = req => {
   return userinfoData
+}
+
+export const getTempData=req=>{
+  return templateData
 }
 
 export const postRoleDeleteData = req => {
