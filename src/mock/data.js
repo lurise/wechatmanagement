@@ -1,12 +1,11 @@
 import Mock from 'mockjs'
-import {doCustomTimes} from '@/libs/util'
+import { doCustomTimes } from '@/libs/util'
 import orgData from './data/org-data'
-import {contentList} from './data/content-data'
-import {treeData} from './data/tree-select'
-import {templateData} from './data/template-data'
-import {userinfoData, Roles, RoleInfo, accessInfo} from './data/userinfo-data'
-import {getParams} from "../libs/util";
-
+import { contentList } from './data/content-data'
+import { treeData } from './data/tree-select'
+import { userinfoData, Roles, RoleInfo, accessInfo } from './data/userinfo-data'
+import { getParams } from '../libs/util'
+import { templateData } from './data/template-data'
 
 const Random = Mock.Random
 
@@ -26,7 +25,7 @@ export const getUserData = req => {
   return userinfoData
 }
 
-export const getTempData=req=>{
+export const getTempData = req => {
   return templateData
 }
 
@@ -72,22 +71,22 @@ export const getContentData = (req) => {
     }
   } else {
     console.log(contentList.slice((pageIndex - 1) * pageSize, pageIndex * pageSize))
-    return{
+    return {
       total: contentList.length,
       contentlist: contentList.slice(contentList.length - pageSize, contentList.length)
     }
   }
 }
 
-export const deleteContent=(req)=>{
+export const deleteContent = (req) => {
   return {
-    status:200
+    status: 200
   }
 }
 
-export const postContentCreateData=(req)=>{
+export const postContentCreateData = (req) => {
   return {
-    status:200
+    status: 200
   }
 }
 

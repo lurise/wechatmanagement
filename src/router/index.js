@@ -3,10 +3,10 @@ import Router from 'vue-router'
 import routes from './routers'
 import store from '@/store'
 import iView from 'iview'
-import {setToken, getToken, canTurnTo, setTitle} from '@/libs/util'
+import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 import config from '@/config'
 
-const {homeName} = config
+const { homeName } = config
 
 Vue.use(Router)
 const router = new Router({
@@ -23,7 +23,7 @@ const turnTo = (to, access, next) => {
   //   next()
   // } // 有权限，可访问
   if (!store.state.user.hasGetAccessInfo) {
-    store.dispatch("getAccessInfo").then(res => {
+    store.dispatch('getAccessInfo').then(res => {
     }).catch(() => {
       setToken('')
       next({
@@ -32,16 +32,16 @@ const turnTo = (to, access, next) => {
     })
   }
   if (canTurnTo(to.name, access, store.state.user.accessInfo)) next() // 有权限，可访问
-  else next({replace: true, name: 'error_401'}) // 无权限，重定向到401页面
+  else next({ replace: true, name: 'error_401' }) // 无权限，重定向到401页面
 }
 
 const alertObj = (obj) => {
-  var description = "";
+  var description = ''
   for (var i in obj) {
-    var property = obj[i];
-    description += i + " = " + property + "\n";
+    var property = obj[i]
+    description += i + ' = ' + property + '\n'
   }
-  alert(description);
+  alert(description)
 }
 
 router.beforeEach((to, from, next) => {

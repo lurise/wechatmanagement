@@ -10,19 +10,19 @@
 </template>
 
 <script>
-  export default {
-    name: 'roleCreateFrom',
-    data() {
-      return {}
-    },
-    methods: {},
-    props: {
-      formItem: {
-        roleName: '',
-        roleInfo: []
-      }
+export default {
+  name: 'roleCreateFrom',
+  data () {
+    return {}
+  },
+  methods: {},
+  props: {
+    formItem: {
+      roleName: '',
+      roleInfo: []
     }
   }
+}
 </script>.
 
 <style scoped>

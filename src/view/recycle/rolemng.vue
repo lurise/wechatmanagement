@@ -34,101 +34,116 @@
 </template>
 
 <script>
-  import Tables from '_c/recycle/roleTable'
-  import {getRoleInfo, postRoleCreateData} from '@/api/data'
-  import roleCreateFrom from '../form/roleCreateFrom'
+import Tables from '_c/recycle/roleTable'
+import { getRoleInfo, postRoleCreateData } from '@/api/data'
+import roleCreateFrom from '../form/roleCreateFrom'
 
-  const roleInfo = [
-    {
-      title: '账号管理',
-      expand: true,
-      children: [
+const roleInfo = [
+  {
+    title: '账号管理',
+    expand: true,
+    children: [
+      {
+        title: '绑定微信号',
+        expand: true
+      },
+      {
+        title: '角色管理',
+        expand: true
+      },
+      {
+        title: '权限管理',
+        expand: true
+      },
+      {
+        title: '菜单及元素管理',
+        expand: true
+      }
+    ]
+  }
+]
+
+export default {
+
+  name: 'rolemng',
+  components: {
+    Tables,
+    roleCreateFrom
+  },
+  data () {
+    return {
+      selectionItems: [],
+      deleteRoleModal: false,
+      contextMenu: true,
+      showContextMenu: true,
+      hasCreate: false,
+      formItem: {
+        id: Number,
+        roleName: '',
+        roleInfo: [
+          {
+            title: '账号管理',
+            expand: true,
+            children: [
+              {
+                title: '绑定微信号',
+                expand: true
+              },
+              {
+                title: '角色管理',
+                expand: true
+              },
+              {
+                title: '权限管理',
+                expand: true
+              },
+              {
+                title: '菜单及元素管理',
+                expand: true
+              }
+            ]
+          }
+        ]
+      },
+      roleLoading: false,
+      roleCreateLoading: true,
+      deleteRoleLoding: false,
+      createNewRoleModal: false,
+      tableData: [],
+      columns: [
         {
-          title: '绑定微信号',
-          expand: true
+          type: 'selection',
+          width: 60,
+          align: 'center'
         },
+        { tytle: '序号', type: 'index', align: 'center', width: 60 },
+        { title: '角色名', key: 'roleName', sortable: true, align: 'center' },
         {
-          title: '角色管理',
-          expand: true
-        },
-        {
-          title: '权限管理',
-          expand: true
-        },
-        {
-          title: '菜单及元素管理',
-          expand: true
+          title: '操作',
+          slot: 'role_edit',
+          width: 150,
+          align: 'center'
         }
       ]
     }
-  ]
-
-
-  export default {
-
-    name: 'rolemng',
-    components: {
-      Tables,
-      roleCreateFrom
-    },
-    data() {
-      return {
-        selectionItems: [],
-        deleteRoleModal: false,
-        contextMenu: true,
-        showContextMenu: true,
-        hasCreate: false,
-        formItem: {
-          id: Number,
-          roleName: '',
-          roleInfo: [
-            {
-              title: '账号管理',
-              expand: true,
-              children: [
-                {
-                  title: '绑定微信号',
-                  expand: true
-                },
-                {
-                  title: '角色管理',
-                  expand: true
-                },
-                {
-                  title: '权限管理',
-                  expand: true
-                },
-                {
-                  title: '菜单及元素管理',
-                  expand: true
-                }
-              ]
-            }
-          ]
-        },
-        roleLoading: false,
-        roleCreateLoading: true,
-        deleteRoleLoding: false,
-        createNewRoleModal: false,
-        tableData: [],
-        columns: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {tytle:'序号',type: 'index', align: 'center',width: 60},
-          {title: '角色名', key: 'roleName', sortable: true, align: 'center'},
-          {
-            title: '操作',
-            slot: 'role_edit',
-            width: 150,
-            align: 'center'
-          }
-        ]
+  },
+  mounted () {
+    this.roleLoading = true
+    getRoleInfo().then(
+      res => {
+        this.tableData = res.data
+        this.roleLoading = false
       }
+    )
+  },
+  methods: {
+    handleDelete () {
+      this.deleteRoleModal = true
     },
-    mounted() {
+    roleDeleteAsyncOK () {
+      // this.deleteRoleLoding = true;
+      this.$refs.tables.deleteSelection()
+      // this.deleteRoleLoding = false;
       this.roleLoading = true
       getRoleInfo().then(
         res => {
@@ -137,59 +152,43 @@
         }
       )
     },
-    methods: {
-      handleDelete() {
-        this.deleteRoleModal = true;
-      },
-      roleDeleteAsyncOK() {
-        // this.deleteRoleLoding = true;
-        this.$refs.tables.deleteSelection()
-        // this.deleteRoleLoding = false;
+    handleCreate () {
+      if (this.hasCreate) {
+        this.formItem.roleName = ''
+        this.formItem.roleInfo = roleInfo
+        this.hasCreate = false
+      }
+      this.createNewRoleModal = true
+    },
+    roleCreateAsyncOK () {
+      this.roleCreateLoading = true
+      // console.log(this.formItem.roleName)
+      if (this.formItem.roleName === '') {
+        this.$Message.error('请输入角色名')
+        this.roleCreateLoading = false
+        return
+      }
+
+      postRoleCreateData().then(req => {
+        console.log(req.data)
+        this.formItem.id = req.data
+        this.createNewRoleModal = false
+        this.hasCreate = true
+
         this.roleLoading = true
         getRoleInfo().then(
           res => {
             this.tableData = res.data
             this.roleLoading = false
+            this.$Message.info('创建成功')
           }
-        )
-      },
-      handleCreate() {
-        if (this.hasCreate) {
-          this.formItem.roleName = '';
-          this.formItem.roleInfo = roleInfo;
-          this.hasCreate = false;
-        }
-        this.createNewRoleModal = true
-      },
-      roleCreateAsyncOK() {
-        this.roleCreateLoading = true;
-        // console.log(this.formItem.roleName)
-        if (this.formItem.roleName === '') {
-          this.$Message.error("请输入角色名");
-          this.roleCreateLoading = false;
-          return
-        }
-
-        postRoleCreateData().then(req => {
-          console.log(req.data)
-          this.formItem.id = req.data;
-          this.createNewRoleModal = false;
-          this.hasCreate = true;
-
-          this.roleLoading = true;
-          getRoleInfo().then(
-            res => {
-              this.tableData = res.data;
-              this.roleLoading = false;
-              this.$Message.info("创建成功")
-            }
-          ).catch(e => {
-            this.$Message.error("创建失败: error->" + e)
-          })
+        ).catch(e => {
+          this.$Message.error('创建失败: error->' + e)
         })
-      }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

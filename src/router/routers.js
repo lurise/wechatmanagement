@@ -93,100 +93,100 @@ export default [
       },
       component: () => import('@/view/content/contentlist/contentlist.vue')
     },
-      {
-        path: 'contentreview',
-        name: 'contentreview',
-        meta: {
-          icon: 'ios-bookmarks',
-          title: '内容审核'
-        },
-        component: parentView,
-        children: [
-          {
-            path: 'tag',
-            name: 'tag',
-            meta: {
-              icon: 'ios-bug',
-              title: '敏感信息标记'
-            },
-            component: () => import('@/view/join-page.vue')
-          },
-          {
-            path: 'olreview',
-            name: 'olreview',
-            meta: {
-              icon: 'md-book',
-              title: '人工复核、审查'
-            },
-            component: () => import('@/view/join-page.vue')
-          },
-        ]
+    {
+      path: 'contentreview',
+      name: 'contentreview',
+      meta: {
+        icon: 'ios-bookmarks',
+        title: '内容审核'
       },
-      {
-        path: 'releaseplan',
-        name: 'releasePlan',
-        meta: {
-          icon: 'logo-buffer',
-          title: '发布计划'
-        },
-        component: parentView,
-        children: [
-          {
-            path: 'officialaccount',
-            name: 'officialaccount',
-            meta: {
-              icon: 'ios-chatbubbles',
-              title: '公众号发布计划'
-            },
-            component: () => import('@/view/join-page.vue')
+      component: parentView,
+      children: [
+        {
+          path: 'tag',
+          name: 'tag',
+          meta: {
+            icon: 'ios-bug',
+            title: '敏感信息标记'
           },
-          {
-            path: 'weindex',
-            name: 'weindex',
-            meta: {
-              icon: 'ios-chatbubbles',
-              title: '微官网发布计划'
-            },
-            component: () => import('@/view/join-page.vue')
+          component: () => import('@/view/join-page.vue')
+        },
+        {
+          path: 'olreview',
+          name: 'olreview',
+          meta: {
+            icon: 'md-book',
+            title: '人工复核、审查'
           },
-          {
-            path: 'liveshow',
-            name: 'liveshow',
-            meta: {
-              icon: 'ios-desktop',
-              title: '直播计划'
-            },
-            component: () => import('@/view/join-page.vue')
+          component: () => import('@/view/join-page.vue')
+        }
+      ]
+    },
+    {
+      path: 'releaseplan',
+      name: 'releasePlan',
+      meta: {
+        icon: 'logo-buffer',
+        title: '发布计划'
+      },
+      component: parentView,
+      children: [
+        {
+          path: 'officialaccount',
+          name: 'officialaccount',
+          meta: {
+            icon: 'ios-chatbubbles',
+            title: '公众号发布计划'
           },
-        ]
-      },
-      {
-        path: 'template',
-        name: 'template',
-        meta: {
-          icon: 'ios-document',
-          title: '模板管理'
+          component: () => import('@/view/join-page.vue')
         },
-        component: () => import('@/view/template/templist.vue')
-      },
-      {
-        path: 'material',
-        name: 'material',
-        meta: {
-          icon: 'md-cloud',
-          title: '素材库'
+        {
+          path: 'weindex',
+          name: 'weindex',
+          meta: {
+            icon: 'ios-chatbubbles',
+            title: '微官网发布计划'
+          },
+          component: () => import('@/view/join-page.vue')
         },
-        component: () => import('@/view/join-page.vue')
+        {
+          path: 'liveshow',
+          name: 'liveshow',
+          meta: {
+            icon: 'ios-desktop',
+            title: '直播计划'
+          },
+          component: () => import('@/view/join-page.vue')
+        }
+      ]
+    },
+    {
+      path: 'template',
+      name: 'template',
+      meta: {
+        icon: 'ios-document',
+        title: '模板管理'
       },
-      {
-        path: 'review',
-        name: 'review',
-        meta: {
-          icon: 'md-create',
-          title: '复盘'
-        },
-        component: () => import('@/view/join-page.vue')
-      }
+      component: () => import('@/view/template/templist.vue')
+    },
+    {
+      path: 'material',
+      name: 'material',
+      meta: {
+        icon: 'md-cloud',
+        title: '素材库'
+      },
+      component: () => import('@/view/join-page.vue')
+    },
+    {
+      path: 'review',
+      name: 'review',
+      meta: {
+        icon: 'md-create',
+        title: '复盘'
+      },
+      component: () => import('@/view/join-page.vue')
+    }
     ]
   },
   {
@@ -271,7 +271,7 @@ export default [
             component: () => import('@/view/join-page.vue')
           }
         ]
-      },
+      }
     ]
   },
   {

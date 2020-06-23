@@ -6,68 +6,65 @@
 
 </template>
 
-
 <script>
-  import jQuery from 'jquery'
-  import VueFroala from 'vue-froala-wysiwyg'
+import jQuery from 'jquery'
+import VueFroala from 'vue-froala-wysiwyg'
 
-  export default {
+export default {
 
-    name: 'froala',
+  name: 'froala',
 
-    data() {
+  data () {
+    return {
 
-      return {
+      // More -> https://www.froala.com/wysiwyg-editor/docs/options
 
-        //More -> https://www.froala.com/wysiwyg-editor/docs/options
+      froalaConfig: {
 
-        froalaConfig: {
+        toolbarButtons: ['undo', 'redo', 'clearFormatting', '|', 'bold', 'italic', 'underline', 'strikeThrough', '|', 'fontFamily', 'fontSize',
 
-          toolbarButtons: ['undo', 'redo', 'clearFormatting', '|', 'bold', 'italic', 'underline', 'strikeThrough', '|', 'fontFamily', 'fontSize',
+          'color', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo',
 
-            'color', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo',
+          'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', '|', 'print', 'spellChecker', 'help',
 
-            'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', '|', 'print', 'spellChecker', 'help',
+          '|', 'fullscreen'],
 
-            '|', 'fullscreen'],
+        // theme: "dark",//主题
 
+        placeholder: '请填写内容',
+        language: 'zh_cn', // 国际化
 
-          // theme: "dark",//主题
+        imageUploadURL: 'http://i.froala.com/upload', // 上传url
 
-          placeholder: "请填写内容",
-          language: "zh_cn",//国际化
+        fileUploadURL: 'http://i.froala.com/upload', // 上传url 更多上传介绍 请访问https://www.froala.com/wysiwyg-editor/docs/options
 
-          imageUploadURL: "http://i.froala.com/upload",//上传url
+        quickInsertButtons: ['image', 'table', 'ul', 'ol', 'hr'], // 快速插入项
 
-          fileUploadURL: "http://i.froala.com/upload",//上传url 更多上传介绍 请访问https://www.froala.com/wysiwyg-editor/docs/options
+        // toolbarVisibleWithoutSelection: true,//是否开启 不选中模式
 
-          quickInsertButtons: ['image', 'table', 'ul', 'ol', 'hr'],//快速插入项
+        // disableRightClick: true,//是否屏蔽右击
 
-          // toolbarVisibleWithoutSelection: true,//是否开启 不选中模式
+        colorsHEXInput: false, // 关闭16进制色值
 
-          // disableRightClick: true,//是否屏蔽右击
+        toolbarSticky: true, // 操作栏是否自动吸顶
 
-          colorsHEXInput: false,//关闭16进制色值
+        zIndex: 99999,
 
-          toolbarSticky: true,//操作栏是否自动吸顶
-
-          zIndex: 99999,
-
-          events: {
-            'froalaEditor.initialized':
+        events: {
+          'froalaEditor.initialized':
               function () {
                 console.log('initialized')
               }
-          },
-        },
-        froalaContent: "",//默认测试文本
-      }
-    },
-    methods: {
-      showHtml() {
-        alert(this.froalaContent)
-      }
+        }
+      },
+      froalaContent: '' // 默认测试文本
+    }
+  },
+  methods: {
+    showHtml () {
+      alert(this.froalaContent)
     }
   }
+}
 
 </script>

@@ -59,7 +59,7 @@ export const RoleInfo = [
                 title: '菜单及元素管理',
                 expand: true,
                 checked: true
-              },
+              }
             ]
           }
         ]
@@ -106,99 +106,91 @@ export const RoleInfo = [
 
 export const accessInfo = [{
   name: 'accountmanage',
-  roleAccess: ["super_admin", "admin", "Editor"],
+  roleAccess: ['super_admin', 'admin', 'Editor'],
   children: [
     {
       name: 'wxbinding',
-      roleAccess: ["super_admin", "admin"],
+      roleAccess: ['super_admin', 'admin']
     },
     {
       name: 'role',
-      roleAccess: ["super_admin", "Editor"],
+      roleAccess: ['super_admin', 'Editor']
     },
     {
       name: 'permission',
-      roleAccess: ["super_admin", "admin"],
+      roleAccess: ['super_admin', 'admin']
     },
     {
       name: 'page',
-      roleAccess: ["super_admin", "admin"],
-    },
+      roleAccess: ['super_admin', 'admin']
+    }
   ]
 },
-  {
-    name: 'contentmanage',
-    roleAccess: ["super_admin", "admin"],
-    children: [
-      {
-        name: 'contentlist',
-        roleAccess: ["super_admin", "admin"]
-      },
-      {
-        name: 'contentreview',
-        roleAccess: ["super_admin", "admin"],
-        children: [
-          {
-            name: 'tag',
-            roleAccess: ["super_admin", "admin"]
-          },
-          {
-            name: 'olreview',
-            roleAccess: ["super_admin", "admin"]
-          }
-        ]
-      },
-      {
-        name: 'releaseplan',
-        roleAccess: ["super_admin", "admin"],
-        children: [
-          {
-            name: 'officialaccount',
-            roleAccess: ["super_admin", "admin"]
-          },
-          {
-            name: 'weindex',
-            roleAccess: ["super_admin", "admin"]
-          },
-          {
-            name: 'liveshow',
-            roleAccess: ["super_admin", "admin"]
-          }
-        ]
-      },
-      {
-        name: 'template',
-        roleAccess: ["super_admin", "admin"],
-      },
-      {
-        name: 'material',
-        roleAccess: ["super_admin", "admin"]
-      },
-      {
-        name: 'review',
-        roleAccess: ["super_admin", "admin"]
-      }
-    ]
-  },
-  {
-    name: '_home',
-    roleAccess: ["super_admin", "admin", "Editor"],
-    children: [
-      {
-        name: 'home',
-        roleAccess: ["super_admin", "admin", "Editor"]
-      }
-    ]
-  },
-  {
-    name: 'error_401',
-  }
+{
+  name: 'contentmanage',
+  roleAccess: ['super_admin', 'admin'],
+  children: [
+    {
+      name: 'contentlist',
+      roleAccess: ['super_admin', 'admin']
+    },
+    {
+      name: 'contentreview',
+      roleAccess: ['super_admin', 'admin'],
+      children: [
+        {
+          name: 'tag',
+          roleAccess: ['super_admin', 'admin']
+        },
+        {
+          name: 'olreview',
+          roleAccess: ['super_admin', 'admin']
+        }
+      ]
+    },
+    {
+      name: 'releaseplan',
+      roleAccess: ['super_admin', 'admin'],
+      children: [
+        {
+          name: 'officialaccount',
+          roleAccess: ['super_admin', 'admin']
+        },
+        {
+          name: 'weindex',
+          roleAccess: ['super_admin', 'admin']
+        },
+        {
+          name: 'liveshow',
+          roleAccess: ['super_admin', 'admin']
+        }
+      ]
+    },
+    {
+      name: 'template',
+      roleAccess: ['super_admin', 'admin']
+    },
+    {
+      name: 'material',
+      roleAccess: ['super_admin', 'admin']
+    },
+    {
+      name: 'review',
+      roleAccess: ['super_admin', 'admin']
+    }
+  ]
+},
+{
+  name: '_home',
+  roleAccess: ['super_admin', 'admin', 'Editor'],
+  children: [
+    {
+      name: 'home',
+      roleAccess: ['super_admin', 'admin', 'Editor']
+    }
+  ]
+},
+{
+  name: 'error_401'
+}
 ]
-
-
-
-
-
-
-
-
