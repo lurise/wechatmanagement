@@ -1,11 +1,11 @@
 import Mock from 'mockjs'
-import { doCustomTimes } from '@/libs/util'
+import {doCustomTimes} from '@/libs/util'
 import orgData from './data/org-data'
-import { contentList } from './data/content-data'
-import { treeData } from './data/tree-select'
-import { userinfoData, Roles, RoleInfo, accessInfo } from './data/userinfo-data'
-import { getParams } from '../libs/util'
-import { templateData } from './data/template-data'
+import {contentList, contentList1} from './data/content-data'
+import {treeData} from './data/tree-select'
+import {userinfoData, Roles, RoleInfo, accessInfo} from './data/userinfo-data'
+import {getParams} from '../libs/util'
+import {templateData} from './data/template-data'
 
 const Random = Mock.Random
 
@@ -75,6 +75,28 @@ export const getContentData = (req) => {
       total: contentList.length,
       contentlist: contentList.slice(contentList.length - pageSize, contentList.length)
     }
+  }
+}
+
+export const getContentData1 = req => {
+  const params = getParams(req.url)
+  let pageIndex = params.pageindex
+  let pageSize = params.pagesize
+
+  if (pageSize * pageIndex > contentList.length && (pageSize - 1) * pageIndex < contentList1.length) {
+    return {
+      contentList: contentList1.slice((pageIndex - 1) * pageSize, contentList1.length)
+    }
+  } else if ((pageIndex - 1) * pageSize > contentList1.length) {
+    return {
+      contentList: [],
+      totalCount: contentList1.length
+    }
+  } else {
+    return {
+      contentList: contentList1.slice((pageIndex - 1) * pageSize, pageIndex * pageSize),
+      totalCount: contentList1.length
+    };
   }
 }
 

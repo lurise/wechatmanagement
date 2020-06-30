@@ -11,8 +11,9 @@
         <Icon type="search"/>&nbsp;&nbsp;搜索
       </Button>
     </div>
-    <Scroll ref="Scroll" :on-reach-bottom="handleReachBottom" height="700">
-      <List item-layout="vertical" style="padding-left:30px;padding-top: 40px;padding-right: 200px" :loading="listLoading">
+    <Scroll ref="Scroll" :on-reach-bottom="handleReachBottom" height="600">
+      <List item-layout="vertical" style="padding-left:30px;padding-top: 40px;padding-right: 200px"
+            :loading="listLoading">
         <ListItem v-for="(item,index) in data" :key="item.title" @mouseover.native="onMouseOver(index)"
                   @mouseleave.native="onMouseLeave(index)">
           <ListItemMeta :title="item.title"/>
@@ -22,29 +23,36 @@
               <p>更新时间</p>
             </li>
             <li>
-              <p>2020年6月23日</p>
+              <p>{{item.updateDate}}</p>
             </li>
             <li>
               <p>{{item.catgory}}</p>
             </li>
-            <ul style="padding-top: 10px" v-if="mouseOver[index].show">
+            <li>
+              <p>敏感词数量</p>
+            </li>
+            <li>
+              <p style="color: red">{{item.tabooCount}}</p>
+            </li>
+
+            <ul  style="padding-top: 10px" v-if="mouseOver[index].show">
               <li>
                 <Tooltip content="编辑">
-                  <Icon type="ios-create-outline" size="24" @click="editContent(index)"/>
+                  <Icon  class="-item-action" type="ios-create-outline" size="24" @click="editContent(index)"/>
                 </Tooltip>
                 <Tooltip content="删除">
                   <Poptip trigger="hover" placement="bottom" confirm
                           title="该操作将删除图文消息，确定删除该图文？"
                           @on-ok="ok(index)"
                           @on-cancel="cancel(index)">
-                    <Icon type="md-trash" size="24" style="padding-left: 10px"/>
+                    <Icon class="-item-action" type="md-trash" size="24" style="padding-left: 10px"/>
                   </Poptip>
                 </Tooltip>
               </li>
             </ul>
           </template>
           <template slot="extra">
-            <img src="https://dev-file.iviewui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px">
+            <img :src="item.coverImg" style="width: 280px">
           </template>
         </ListItem>
       </List>
@@ -54,130 +62,20 @@
 </template>
 
 <script>
+  import {deleteContent, getContentData} from "../../../api/data";
+
   export default {
     name: 'contentlist',
     data() {
       return {
-        listLoading:false,
+        listLoading: false,
         searchKey: '',
         options: ['标题', '内容'],
         searchValue: '',
-        mouseOver: [{
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }, {
-          show: false
-        }],
-        data: [
-          {
-            title: 'This is title 1',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 2',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 3',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.<br>his is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the con<br>his is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the con<br>his is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the con<br>his is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the content.This is the content, this is the content, this is the content, this is the con',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 4',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 5',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 6',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 7',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 8',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 9',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 10',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 11',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          },
-          {
-            title: 'This is title 12',
-            description: 'This is description, this is description, this is description.',
-            avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-            content: 'This is the content, this is the content, this is the content, this is the content.',
-            catgory:'分类一'
-          }
-        ]
-
+        mouseOver: [],
+        data: [],
+        currentPage: 1,
+        totalCount: 0
       }
     },
     methods: {
@@ -188,10 +86,22 @@
         this.mouseOver[index].show = false
       },
       ok(index) {
-        this.$Message.info('正在删除' + index)
+        this.$Message.info('正在删除' + this.data[index].title)
+        let item = this.data[index]
+        deleteContent(item).then(
+          res => {
+            console.log(res.data.status)
+            if (res.data.status === 200) {
+              this.$Message.info(this.data[index].title + " 删除成功！");
+              this.data = this.data.filter((t, i) => i !== index);
+            } else {
+              this.$Message.error(this.data[index].title + " 删除失败，请稍后再试。")
+            }
+          }
+        )
       },
       cancel(index) {
-
+        console.log("Cancel delete.")
       },
       editContent(index) {
         this.$Message.info('正在编辑' + index)
@@ -204,52 +114,59 @@
       },
       handleReachBottom() {
         return new Promise(resolve => {
-          setTimeout(() => {
-            for (let i = 0; i < 10; i++) {
-              if (this.data.length > 40) {
-                this.$Message.info("已经加载完成全部数据了")
-                resolve();
-                return
+          this.currentPage += 1;
+          getContentData(this.currentPage, 10).then(
+            res => {
+              if (this.data.length === res.data.totalCount) {
+                this.$Message.info("已加载完全部数据")
+              } else if (res.data.contentList.length > 0) {
+                this.totalCount = res.data.totalCount;
+                this.data.push(...res.data.contentList);
+                for (let i = 0; i < res.data.contentList.length; i++) {
+                  this.mouseOver.push({show: true})
+                }
+              } else {
+                this.totalCount = res.data.totalCount;
               }
-              let content = {
-                title: 'This is  added title ' + i,
-                description: 'This is description, this is description, this is description.',
-                avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-                content: 'This is the content, this is the content, this is the content, this is the content.',
-                catgory:'分类一'
-              }
-              this.data.push(content)
-              this.mouseOver.push({show: false})
             }
-
-            resolve();
-          }, 2000)
+          )
+          resolve();
         })
       },
       loadMore() {
         this.listLoading = true;
-        setTimeout(() => {
-
-          for (let i = 0; i < 10; i++) {
-            if (this.data.length > 40) {
-              this.$Message.info("已经加载完成全部数据了")
-              return
+        this.currentPage += 1;
+        getContentData(this.currentPage, 10).then(
+          res => {
+            if (res.data.totalCount === this.data.length) {
+              this.totalCount = res.data.totalCount
+              this.$Message.info("已加载完全部数据")
+            } else if (res.data.contentList.length > 0) {
+              this.totalCount = res.data.totalCount;
+              this.data.push(...res.data.contentList);
+              for (let i = 0; i < res.data.contentList.length; i++) {
+                this.mouseOver.push({show: false})
+              }
+            } else {
+              this.totalCount = res.data.totalCount;
+              // this.currentPage -= 1;
             }
-            let content = {
-              title: 'This is  added title ' + i,
-              description: 'This is description, this is description, this is description.',
-              avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
-              content: 'This is the content, this is the content, this is the content, this is the content.',
-              catgory:'分类一'
-            }
-            this.data.push(content)
-            this.mouseOver.push({show: false})
-
+            this.listLoading = false;
           }
+        )
 
-          this.listLoading = false;
-        }, 2000)
       }
+    },
+    mounted() {
+      getContentData(this.currentPage, 10).then(
+        res => {
+          this.data = res.data.contentList;
+          this.totalCount = res.data.totalCount;
+          for (let i = 0; i < this.data.length; i++) {
+            this.mouseOver.push({show: false})
+          }
+        }
+      )
     }
   }
 </script>
@@ -280,13 +197,17 @@
     margin: auto 20px 10px auto;
   }
 
-  .itemContent{
+  .itemContent {
     width: 500px;
     display: block;
-    text-overflow: ellipsis;  /*超出内容用省略号*/
+    text-overflow: ellipsis; /*超出内容用省略号*/
     overflow: hidden; /*内容超出后隐藏*/
     white-space: nowrap; /*文本不进行换行*/
     height: 20px;
     /*white-space: pre-line;*/
+  }
+
+  .-item-action{
+    cursor: pointer;
   }
 </style>

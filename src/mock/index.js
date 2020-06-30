@@ -10,7 +10,7 @@ import {
   getOrgData,
   getTreeSelectData,
   getAccessInfo,
-  getContentData,
+  getContentData1,
   postRoleCreateData,
   postRoleDeleteData,
   postContentCreateData,
@@ -27,7 +27,7 @@ Mock.setup({
 // 登录相关和获取用户信息
 Mock.mock(/\/login/, login)
 Mock.mock(/\/get_info/, getUserInfo)
-Mock.mock(/\/get_content_data/, getContentData)
+Mock.mock(/\/get_content_data/, getContentData1)
 Mock.mock(/\/get_temp_data/, getTempData)
 Mock.mock(/\/create_role/, postRoleCreateData)
 Mock.mock(/\/delete_role/, postRoleDeleteData)
