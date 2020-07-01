@@ -8,7 +8,7 @@ import iView from 'iview'
 import i18n from '@/locale'
 import config from '@/config'
 import importDirective from '@/directive'
-import { directive as clickOutside } from 'v-click-outside-x'
+import {directive as clickOutside} from 'v-click-outside-x'
 import installPlugin from '@/plugin'
 import './index.less'
 import '@/assets/icons/iconfont.css'
@@ -29,6 +29,7 @@ require('froala-editor/css/froala_editor.pkgd.min.css')
 require('font-awesome/css/font-awesome.css')
 require('froala-editor/css/froala_style.min.css')
 window.$ = jQuery
+window.jQuery = jQuery
 Vue.use(VueFroala)
 
 // 实际打包时应该不引入mock

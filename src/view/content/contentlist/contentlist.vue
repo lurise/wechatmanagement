@@ -35,10 +35,10 @@
               <p style="color: red">{{item.tabooCount}}</p>
             </li>
 
-            <ul  style="padding-top: 10px" v-if="mouseOver[index].show">
+            <ul style="padding-top: 10px" v-if="mouseOver[index].show">
               <li>
                 <Tooltip content="编辑">
-                  <Icon  class="-item-action" type="ios-create-outline" size="24" @click="editContent(index)"/>
+                  <Icon class="-item-action" type="ios-create-outline" size="24" @click="editContent(index)"/>
                 </Tooltip>
                 <Tooltip content="删除">
                   <Poptip trigger="hover" placement="bottom" confirm
@@ -58,16 +58,28 @@
       </List>
     </Scroll>
     <Button type="primary" @click="loadMore">加载更多</Button>
+    <Button type="primary" @click="createNewContent"> 新建内容</Button>
+    <Modal v-model="editModal" width="1000"
+           @on-ok="contentCreateAsyncOK" title="创建新内容">
+      <create-form :content-create-form-item="formItem"></create-form>
+    </Modal>
   </div>
 </template>
 
 <script>
   import {deleteContent, getContentData} from "../../../api/data";
+  import CreateForm from "./contentCreateForm"
 
   export default {
     name: 'contentlist',
     data() {
       return {
+        formItem: {
+          title:'',
+          category:'',
+          content: ''
+        },
+        editModal: false,
         listLoading: false,
         searchKey: '',
         options: ['标题', '内容'],
@@ -78,6 +90,9 @@
         totalCount: 0
       }
     },
+    components: {
+      CreateForm
+    },
     methods: {
       onMouseOver(index) {
         this.mouseOver[index].show = true
@@ -86,6 +101,7 @@
         this.mouseOver[index].show = false
       },
       ok(index) {
+        this.listLoading = true;
         this.$Message.info('正在删除' + this.data[index].title)
         let item = this.data[index]
         deleteContent(item).then(
@@ -97,6 +113,7 @@
             } else {
               this.$Message.error(this.data[index].title + " 删除失败，请稍后再试。")
             }
+            this.listLoading = false;
           }
         )
       },
@@ -111,6 +128,9 @@
       },
       handleSearch() {
         console.log('handle search')
+      },
+      contentCreateAsyncOK() {
+
       },
       handleReachBottom() {
         return new Promise(resolve => {
@@ -149,15 +169,18 @@
               }
             } else {
               this.totalCount = res.data.totalCount;
-              // this.currentPage -= 1;
             }
             this.listLoading = false;
           }
         )
 
+      },
+      createNewContent() {
+        this.editModal = true;
       }
     },
     mounted() {
+      this.listLoading=true;
       getContentData(this.currentPage, 10).then(
         res => {
           this.data = res.data.contentList;
@@ -165,6 +188,7 @@
           for (let i = 0; i < this.data.length; i++) {
             this.mouseOver.push({show: false})
           }
+          this.listLoading=false;
         }
       )
     }
@@ -198,7 +222,7 @@
   }
 
   .itemContent {
-    width: 500px;
+    width: 1000px;
     display: block;
     text-overflow: ellipsis; /*超出内容用省略号*/
     overflow: hidden; /*内容超出后隐藏*/
@@ -207,7 +231,7 @@
     /*white-space: pre-line;*/
   }
 
-  .-item-action{
+  .-item-action {
     cursor: pointer;
   }
 </style>
